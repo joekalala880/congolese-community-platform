@@ -6,6 +6,7 @@ import {
   Route,
   Navigate
 } from "react-router-dom";
+import Developer from "./Developer";
 
 import { Toaster } from "react-hot-toast";
 
@@ -33,6 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
     <BrowserRouter>
       <Routes>
+        <Route path="/developer" element={<Developer />} />
         <Route path="/" element={<App />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/housing" element={<Housing />} />
