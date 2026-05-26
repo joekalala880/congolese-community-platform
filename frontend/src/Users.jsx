@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
 
-const user = JSON.parse(localStorage.getItem("user"));
-
-if (!user || user.role !== "admin") {
-  return (
-    <h1 style={{ textAlign: "center", marginTop: "50px", color: "red" }}>
-      Access Denied
-    </h1>
-  );
-}
-
 function Users() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user || user.role !== "admin") {
+    return (
+      <h1 style={{ textAlign: "center", marginTop: "50px", color: "red" }}>
+        Access Denied
+      </h1>
+    );
+  }
+
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -29,7 +29,7 @@ function Users() {
       })
       .catch((error) => {
         console.log("USERS FETCH ERROR:", error);
-        alert(error.message);
+        toast.error(error.message);
       });
   };
 
@@ -44,7 +44,7 @@ function Users() {
 
       const data = await response.json();
 
-    toast.success(data.message);
+      toast.success(data.message);
 
       setUsers(users.filter((user) => user._id !== id));
     } catch (error) {
