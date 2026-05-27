@@ -6,7 +6,7 @@ import {
   Route,
   Navigate
 } from "react-router-dom";
-import Developer from "./Developer";
+
 
 import { Toaster } from "react-hot-toast";
 
@@ -22,6 +22,7 @@ import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 import Users from "./Users";
 import MyRequests from "./MyRequests";
+import Developer from "./DeveloperPage";
 
 import "./index.css";
 
