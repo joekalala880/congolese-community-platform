@@ -128,6 +128,18 @@ function Developer() {
         </div>
 
         <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
+          <h2>⭐ Project Highlights</h2>
+
+          <ul>
+            <li>Built a full-stack MERN platform for community support services</li>
+            <li>Created user authentication and role-based access control</li>
+            <li>Designed request workflows for housing, food, healthcare, and immigration</li>
+            <li>Added admin dashboard features to manage community requests</li>
+            <li>Deployed the frontend on Vercel with GitHub integration</li>
+          </ul>
+        </div>
+
+        <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
           <h2>🧑‍💻 Developer Information</h2>
 
           <img
@@ -241,23 +253,23 @@ function Developer() {
             </a>
 
             <a
-  href="/Joel-Kalala-Resume.pdf"
-  target="_blank"
-  rel="noopener noreferrer"
-  style={{
-    backgroundColor: "#7c3aed",
-    color: "white",
-    padding: "10px 20px",
-    borderRadius: "10px",
-    textDecoration: "none",
-    marginRight: "10px",
-    display: "inline-block",
-    transition: "0.3s",
-    cursor: "pointer",
-  }}
->
-  Resume
-</a>
+              href="/Joel-Kalala-Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                backgroundColor: "#7c3aed",
+                color: "white",
+                padding: "10px 20px",
+                borderRadius: "10px",
+                textDecoration: "none",
+                marginRight: "10px",
+                display: "inline-block",
+                transition: "0.3s",
+                cursor: "pointer",
+              }}
+            >
+              Resume
+            </a>
 
             <a
               href="https://www.linkedin.com/in/joel-kalala1-079492293"
