@@ -67,6 +67,28 @@ function Developer() {
     <p>Responsive Goal</p>
   </div>
 </div>
+<div
+  style={{
+    backgroundColor: "#1f2937",
+    padding: "30px",
+    borderRadius: "15px",
+    marginBottom: "30px",
+  }}
+>
+  <h2>🌍 About the Platform</h2>
+
+  <p>
+    Congolese Community is a full-stack support platform designed to help
+    community members request assistance with housing, food, healthcare,
+    and immigration services.
+  </p>
+
+  <p>
+    The goal of this project is to make support easier to access, organize
+    requests for administrators, and provide a clean digital system for
+    community service management.
+  </p>
+</div>
           <h2>🧑‍💻 Developer Information</h2>
       <img
   src="https://avatars.githubusercontent.com/u/9919?v=4"
