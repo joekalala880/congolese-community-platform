@@ -260,6 +260,16 @@ cursor: "pointer",
           </ul>
         </div>
       </div>
+      <footer
+  style={{
+    textAlign: "center",
+    padding: "20px",
+    color: "#9ca3af",
+    marginTop: "40px",
+  }}
+>
+  © 2026 Joel Kalala — Congolese Community Platform
+</footer>
     </>
   );
 }
