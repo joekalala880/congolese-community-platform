@@ -239,6 +239,27 @@ function Developer() {
           </ul>
         </div>
       </div>
+      <div
+  style={{
+    backgroundColor: "#1f2937",
+    padding: "30px",
+    borderRadius: "15px",
+    marginBottom: "30px",
+    boxShadow: "0 0 20px rgba(37, 99, 235, 0.15)",
+    transition: "0.3s ease",
+  }}
+  onMouseOver={hoverUp}
+  onMouseOut={hoverDown}
+>
+  <h2>🟢 System Status</h2>
+
+  <p>✅ Frontend Deployment: Online</p>
+  <p>✅ Vercel Hosting: Active</p>
+  <p>✅ React Router: Working</p>
+  <p>✅ Authentication System: Running</p>
+  <p>🟡 MongoDB Atlas: Future Upgrade</p>
+  <p>🟡 Backend API Hosting: In Progress</p>
+</div>
 
       <footer
         style={{
