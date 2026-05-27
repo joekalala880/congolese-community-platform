@@ -73,17 +73,16 @@ function Developer() {
     padding: "30px",
     borderRadius: "15px",
     marginBottom: "30px",
+    textAlign: "left",
   }}
 >
   <h2>🌍 About the Platform</h2>
 
-  <p>
+  <p style={{ marginTop: "10px" }}>
     Congolese Community is a full-stack support platform designed to help
     community members request assistance with housing, food, healthcare,
     and immigration services.
-  </p>
-
-  <p>
+ 
     The goal of this project is to make support easier to access, organize
     requests for administrators, and provide a clean digital system for
     community service management.
@@ -105,10 +104,20 @@ function Developer() {
     borderRadius: "50%",
     marginBottom: "20px",
     border: "4px solid #2563eb",
-    boxShadow: "0 0 20px #2563eb",
-    transition: "0.3s",
+   boxShadow: "0 0 20px rgba(37, 99, 235, 0.15)",
+   transition: "0.3s ease",
     cursor: "pointer",
   }}
+
+  onMouseOver={(e) => {
+    e.currentTarget.style.transform = "translateY(-5px)";
+  }}
+
+  onMouseOut={(e) => {
+    e.currentTarget.style.transform = "translateY(0px)";
+  }}
+
+  
 />
           <p><strong>Name:</strong> Joel Kalala</p>
           <p><strong>Major:</strong> Computer Science</p>
