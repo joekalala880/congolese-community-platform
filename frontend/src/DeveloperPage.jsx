@@ -44,15 +44,24 @@ function Developer() {
           }}
         >
           <h2>🧑‍💻 Developer Information</h2>
-          <img
+      <img
   src="https://avatars.githubusercontent.com/u/9919?v=4"
   alt="Developer"
+  onMouseOver={(e) => {
+    e.currentTarget.style.transform = "scale(1.05)";
+  }}
+  onMouseOut={(e) => {
+    e.currentTarget.style.transform = "scale(1)";
+  }}
   style={{
     width: "120px",
     height: "120px",
     borderRadius: "50%",
     marginBottom: "20px",
     border: "4px solid #2563eb",
+    boxShadow: "0 0 20px #2563eb",
+    transition: "0.3s",
+    cursor: "pointer",
   }}
 />
           <p><strong>Name:</strong> Joel Kalala</p>
@@ -154,15 +163,15 @@ cursor: "pointer",
   href="https://www.linkedin.com/in/joel-kalala1-079492293"
   target="_blank"
   rel="noopener noreferrer"
-  style={{
-    backgroundColor: "#0a66c2",
-    color: "white",
-    padding: "10px 20px",
-    borderRadius: "10px",
-    textDecoration: "none",
-    marginRight: "10px",
-    display: "inline-block",
-  }}
+ style={{
+  width: "120px",
+  height: "120px",
+  borderRadius: "50%",
+  marginBottom: "20px",
+  border: "4px solid #2563eb",
+  boxShadow: "0 0 20px #2563eb",
+  transition: "0.3s",
+}}
 >
   LinkedIn
 </a>
