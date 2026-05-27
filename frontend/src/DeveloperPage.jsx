@@ -44,6 +44,17 @@ function Developer() {
           }}
         >
           <h2>🧑‍💻 Developer Information</h2>
+          <img
+  src="https://avatars.githubusercontent.com/u/9919?v=4"
+  alt="Developer"
+  style={{
+    width: "120px",
+    height: "120px",
+    borderRadius: "50%",
+    marginBottom: "20px",
+    border: "4px solid #2563eb",
+  }}
+/>
           <p><strong>Name:</strong> Joel Kalala</p>
           <p><strong>Major:</strong> Computer Science</p>
           <p><strong>Role:</strong> Full-Stack MERN Developer</p>
@@ -131,7 +142,9 @@ function Developer() {
                 borderRadius: "10px",
                 textDecoration: "none",
                 marginRight: "10px",
-                display: "inline-block",
+               display: "inline-block",
+transition: "0.3s",
+cursor: "pointer",
               }}
             >
               View GitHub
