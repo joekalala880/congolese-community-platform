@@ -102,75 +102,79 @@ function Developer() {
           <h2>📬 Contact & Portfolio</h2>
           <p><strong>Developer:</strong> Joel Kalala</p>
           <p><strong>Email:</strong> kalalajoel27@gmail.com</p>
-         <p>
-  <strong>GitHub:</strong>{" "}
-  <a
-    href="https://github.com/joekalala880"
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{ color: "#60a5fa", textDecoration: "underline" }}
-  >
-    joekalala880
-  </a>
-</p>
-          <p><strong>Project Type:</strong> Full-Stack MERN Community Support Platform</p>
+
+          <p>
+            <strong>GitHub:</strong>{" "}
+            <a
+              href="https://github.com/joekalala880"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#60a5fa", textDecoration: "underline" }}
+            >
+              joekalala880
+            </a>
+          </p>
+
+          <p>
+            <strong>Project Type:</strong> Full-Stack MERN Community Support Platform
+          </p>
+
           <div style={{ marginTop: "20px" }}>
-  <a
-    href="https://github.com/joekalala880"
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{
-      backgroundColor: "#2563eb",
-      color: "white",
-      padding: "10px 20px",
-      borderRadius: "10px",
-      textDecoration: "none",
-      marginRight: "10px",
-      display: "inline-block",
-    }}
-  >
-    View GitHub
-  </a>
+            <a
+              href="https://github.com/joekalala880"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                backgroundColor: "#2563eb",
+                color: "white",
+                padding: "10px 20px",
+                borderRadius: "10px",
+                textDecoration: "none",
+                marginRight: "10px",
+                display: "inline-block",
+              }}
+            >
+              View GitHub
+            </a>
 
-  <a
-    href="/dashboard"
-    style={{
-      backgroundColor: "#16a34a",
-      color: "white",
-      padding: "10px 20px",
-      borderRadius: "10px",
-      textDecoration: "none",
-      display: "inline-block",
-    }}
-  >
-    Open Platform
-  </a>
-</div>
-
-</div>
+            <a
+              href="/dashboard"
+              style={{
+                backgroundColor: "#16a34a",
+                color: "white",
+                padding: "10px 20px",
+                borderRadius: "10px",
+                textDecoration: "none",
+                display: "inline-block",
+              }}
+            >
+              Open Platform
+            </a>
+          </div>
         </div>
-        <div
-  style={{
-    backgroundColor: "#1f2937",
-    padding: "30px",
-    borderRadius: "15px",
-    marginBottom: "30px",
-  }}
->
-  <h2>🚀 Future Improvements</h2>
 
-  <ul>
-    <li>MongoDB Atlas production database</li>
-    <li>Backend deployment on Render or Railway</li>
-    <li>JWT protected API</li>
-    <li>Admin analytics dashboard</li>
-    <li>Email notifications</li>
-    <li>File uploads for request documents</li>
-    <li>AI chatbot helper</li>
-    <li>Community announcements system</li>
-  </ul>
-</div>
-      
+        <div
+          style={{
+            backgroundColor: "#1f2937",
+            padding: "30px",
+            borderRadius: "15px",
+            marginBottom: "30px",
+          }}
+        >
+          <h2>🚀 Future Improvements</h2>
+
+          <ul>
+            <li>MongoDB Atlas production database</li>
+            <li>Backend deployment on Render or Railway</li>
+            <li>JWT protected API</li>
+            <li>Admin analytics dashboard</li>
+            <li>Email notifications</li>
+            <li>File uploads for request documents</li>
+            <li>AI chatbot helper</li>
+            <li>Community announcements system</li>
+          </ul>
+        </div>
+      </div>
     </>
   );
 }
