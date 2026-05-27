@@ -6,60 +6,71 @@ function Developer() {
     padding: "30px",
     borderRadius: "15px",
     marginBottom: "30px",
-    boxShadow: "0 0 20px rgba(37, 99, 235, 0.15)",
+    color: "white",
     transition: "0.3s ease",
   };
 
   const hoverUp = (e) => {
     e.currentTarget.style.transform = "translateY(-5px)";
+    e.currentTarget.style.boxShadow = "0 0 20px rgba(37, 99, 235, 0.25)";
   };
 
   const hoverDown = (e) => {
     e.currentTarget.style.transform = "translateY(0px)";
+    e.currentTarget.style.boxShadow = "none";
   };
 
   return (
     <>
       <Navbar />
-      <style>
-  {`
-    @keyframes pulse {
-      0% { opacity: 0.7; }
-      50% { opacity: 1; }
-      100% { opacity: 0.7; }
-    }
-  `}
-</style>
 
-      <div style={{ textAlign: "center", marginTop: "40px", marginBottom: "40px" }}>
-        <h1 style={{ color: "#2563eb", fontSize: "36px", fontWeight: "bold" }}>
+      <style>
+        {`
+          @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+          }
+        `}
+      </style>
+
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: "40px",
+          marginBottom: "40px",
+        }}
+      >
+        <h1
+          style={{
+            color: "#2563eb",
+            fontSize: "36px",
+            fontWeight: "bold",
+          }}
+        >
           Project Documentation
         </h1>
 
-       <p
-  style={{
-    color: "#6b7280",
-    fontSize: "18px",
-    letterSpacing: "1px",
-    animation: "pulse 2s infinite",
-  }}
->
-  Building technology solutions for the Congolese community 🚀
-</p>
+        <p
+          style={{
+            color: "#6b7280",
+            fontSize: "18px",
+            letterSpacing: "1px",
+            animation: "pulse 2s infinite",
+          }}
+        >
+          Building technology solutions for the Congolese community 🚀
+        </p>
       </div>
 
-     <div
-  style={{
-    backgroundColor: "#1f2937",
-    padding: "30px",
-    borderRadius: "15px",
-    marginBottom: "30px",
-    maxWidth: "1000px",
-    margin: "0 auto 30px auto",
-    boxShadow: "0 0 20px rgba(37, 99, 235, 0.15)",
-    transition: "0.3s ease",
-  }}
->
+      <div
+        style={{
+          padding: "40px",
+          maxWidth: "1000px",
+          margin: "auto",
+          color: "white",
+        }}
+      >
         <div
           style={{
             display: "grid",
@@ -68,24 +79,41 @@ function Developer() {
             marginBottom: "30px",
           }}
         >
-          <div style={{ ...cardStyle, textAlign: "center" }} onMouseOver={hoverUp} onMouseOut={hoverDown}>
+          <div
+            style={{ ...cardStyle, textAlign: "center" }}
+            onMouseOver={hoverUp}
+            onMouseOut={hoverDown}
+          >
             <h2>4+</h2>
             <p>Support Services</p>
           </div>
 
-          <div style={{ ...cardStyle, textAlign: "center" }} onMouseOver={hoverUp} onMouseOut={hoverDown}>
+          <div
+            style={{ ...cardStyle, textAlign: "center" }}
+            onMouseOver={hoverUp}
+            onMouseOut={hoverDown}
+          >
             <h2>3</h2>
             <p>User Roles</p>
           </div>
 
-          <div style={{ ...cardStyle, textAlign: "center" }} onMouseOver={hoverUp} onMouseOut={hoverDown}>
+          <div
+            style={{ ...cardStyle, textAlign: "center" }}
+            onMouseOver={hoverUp}
+            onMouseOut={hoverDown}
+          >
             <h2>100%</h2>
             <p>Responsive Goal</p>
           </div>
         </div>
 
-        <div style={{ ...cardStyle, textAlign: "left" }} onMouseOver={hoverUp} onMouseOut={hoverDown}>
+        <div
+          style={{ ...cardStyle, textAlign: "left" }}
+          onMouseOver={hoverUp}
+          onMouseOut={hoverDown}
+        >
           <h2>🌍 About the Platform</h2>
+
           <p style={{ marginTop: "10px" }}>
             Congolese Community is a full-stack support platform designed to help
             community members request assistance with housing, food, healthcare,
@@ -123,19 +151,26 @@ function Developer() {
             }}
           />
 
-          <p><strong>Name:</strong> Joel Kalala</p>
-          <p><strong>Major:</strong> Computer Science</p>
-          <p><strong>Role:</strong> Full-Stack MERN Developer</p>
+          <p>
+            <strong>Name:</strong> Joel Kalala
+          </p>
+          <p>
+            <strong>Major:</strong> Computer Science
+          </p>
+          <p>
+            <strong>Role:</strong> Full-Stack MERN Developer
+          </p>
 
           <p>
             This platform was designed and developed to help the Congolese
-            community access housing, immigration, food assistance, and
-            healthcare support services.
+            community access housing, immigration, food assistance, and healthcare
+            support services.
           </p>
         </div>
 
         <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
           <h2>⚙️ Technologies Used</h2>
+
           <ul>
             <li>React.js and Vite frontend</li>
             <li>Node.js and Express backend</li>
@@ -148,6 +183,7 @@ function Developer() {
 
         <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
           <h2>📄 Project Features</h2>
+
           <ul>
             <li>User authentication system</li>
             <li>Admin dashboard</li>
@@ -160,8 +196,12 @@ function Developer() {
         <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
           <h2>📬 Contact & Portfolio</h2>
 
-          <p><strong>Developer:</strong> Joel Kalala</p>
-          <p><strong>Email:</strong> kalalajoel27@gmail.com</p>
+          <p>
+            <strong>Developer:</strong> Joel Kalala
+          </p>
+          <p>
+            <strong>Email:</strong> kalalajoel27@gmail.com
+          </p>
 
           <p>
             <strong>GitHub:</strong>{" "}
@@ -176,7 +216,8 @@ function Developer() {
           </p>
 
           <p>
-            <strong>Project Type:</strong> Full-Stack MERN Community Support Platform
+            <strong>Project Type:</strong> Full-Stack MERN Community Support
+            Platform
           </p>
 
           <div style={{ marginTop: "20px" }}>
@@ -238,6 +279,7 @@ function Developer() {
 
         <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
           <h2>🚀 Future Improvements</h2>
+
           <ul>
             <li>MongoDB Atlas production database</li>
             <li>Backend deployment on Render or Railway</li>
@@ -249,28 +291,18 @@ function Developer() {
             <li>Community announcements system</li>
           </ul>
         </div>
-      </div>
-      <div
-  style={{
-    backgroundColor: "#1f2937",
-    padding: "30px",
-    borderRadius: "15px",
-    marginBottom: "30px",
-    boxShadow: "0 0 20px rgba(37, 99, 235, 0.15)",
-    transition: "0.3s ease",
-  }}
-  onMouseOver={hoverUp}
-  onMouseOut={hoverDown}
->
-  <h2>🟢 System Status</h2>
 
-  <p>✅ Frontend Deployment: Online</p>
-  <p>✅ Vercel Hosting: Active</p>
-  <p>✅ React Router: Working</p>
-  <p>✅ Authentication System: Running</p>
-  <p>🟡 MongoDB Atlas: Future Upgrade</p>
-  <p>🟡 Backend API Hosting: In Progress</p>
-</div>
+        <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
+          <h2>🟢 System Status</h2>
+
+          <p>✅ Frontend Deployment: Online</p>
+          <p>✅ Vercel Hosting: Active</p>
+          <p>✅ React Router: Working</p>
+          <p>✅ Authentication System: Running</p>
+          <p>🟡 MongoDB Atlas: Future Upgrade</p>
+          <p>🟡 Backend API Hosting: In Progress</p>
+        </div>
+      </div>
 
       <footer
         style={{
