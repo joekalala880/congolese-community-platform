@@ -114,6 +114,40 @@ function Developer() {
   </a>
 </p>
           <p><strong>Project Type:</strong> Full-Stack MERN Community Support Platform</p>
+          <div style={{ marginTop: "20px" }}>
+  <a
+    href="https://github.com/joekalala880"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      backgroundColor: "#2563eb",
+      color: "white",
+      padding: "10px 20px",
+      borderRadius: "10px",
+      textDecoration: "none",
+      marginRight: "10px",
+      display: "inline-block",
+    }}
+  >
+    View GitHub
+  </a>
+
+  <a
+    href="/dashboard"
+    style={{
+      backgroundColor: "#16a34a",
+      color: "white",
+      padding: "10px 20px",
+      borderRadius: "10px",
+      textDecoration: "none",
+      display: "inline-block",
+    }}
+  >
+    Open Platform
+  </a>
+</div>
+
+</div>
         </div>
         <div
   style={{
@@ -136,7 +170,7 @@ function Developer() {
     <li>Community announcements system</li>
   </ul>
 </div>
-      </div>
+      
     </>
   );
 }
