@@ -241,6 +241,25 @@ function Developer() {
             </a>
 
             <a
+  href="/Joel-Kalala-Resume.pdf"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{
+    backgroundColor: "#7c3aed",
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "10px",
+    textDecoration: "none",
+    marginRight: "10px",
+    display: "inline-block",
+    transition: "0.3s",
+    cursor: "pointer",
+  }}
+>
+  Resume
+</a>
+
+            <a
               href="https://www.linkedin.com/in/joel-kalala1-079492293"
               target="_blank"
               rel="noopener noreferrer"
