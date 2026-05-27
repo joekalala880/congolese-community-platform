@@ -35,6 +35,7 @@ function Developer() {
           color: "white",
         }}
       >
+      
         <div
           style={{
             backgroundColor: "#1f2937",
@@ -43,6 +44,29 @@ function Developer() {
             marginBottom: "30px",
           }}
         >
+          <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: "20px",
+    marginBottom: "30px",
+  }}
+>
+  <div style={{ backgroundColor: "#1f2937", padding: "20px", borderRadius: "15px", textAlign: "center" }}>
+    <h2>4+</h2>
+    <p>Support Services</p>
+  </div>
+
+  <div style={{ backgroundColor: "#1f2937", padding: "20px", borderRadius: "15px", textAlign: "center" }}>
+    <h2>3</h2>
+    <p>User Roles</p>
+  </div>
+
+  <div style={{ backgroundColor: "#1f2937", padding: "20px", borderRadius: "15px", textAlign: "center" }}>
+    <h2>100%</h2>
+    <p>Responsive Goal</p>
+  </div>
+</div>
           <h2>🧑‍💻 Developer Information</h2>
       <img
   src="https://avatars.githubusercontent.com/u/9919?v=4"
