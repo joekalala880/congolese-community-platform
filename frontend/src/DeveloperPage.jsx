@@ -48,7 +48,18 @@ function Developer() {
 </p>
       </div>
 
-      <div style={{ padding: "40px", maxWidth: "1000px", margin: "auto", color: "white" }}>
+     <div
+  style={{
+    backgroundColor: "#1f2937",
+    padding: "30px",
+    borderRadius: "15px",
+    marginBottom: "30px",
+    maxWidth: "1000px",
+    margin: "0 auto 30px auto",
+    boxShadow: "0 0 20px rgba(37, 99, 235, 0.15)",
+    transition: "0.3s ease",
+  }}
+>
         <div
           style={{
             display: "grid",
