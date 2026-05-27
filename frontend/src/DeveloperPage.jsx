@@ -138,16 +138,33 @@ function Developer() {
             </a>
 
             <a
-              href="/dashboard"
-              style={{
-                backgroundColor: "#16a34a",
-                color: "white",
-                padding: "10px 20px",
-                borderRadius: "10px",
-                textDecoration: "none",
-                display: "inline-block",
-              }}
-            >
+  href="https://www.linkedin.com/in/joel-kalala1-079492293"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{
+    backgroundColor: "#0a66c2",
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "10px",
+    textDecoration: "none",
+    marginRight: "10px",
+    display: "inline-block",
+  }}
+>
+  LinkedIn
+</a>
+
+<a
+  href="/dashboard"
+  style={{
+    backgroundColor: "#16a34a",
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "10px",
+    textDecoration: "none",
+    display: "inline-block",
+  }}
+>
               Open Platform
             </a>
           </div>
