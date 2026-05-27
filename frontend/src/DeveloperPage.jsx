@@ -21,15 +21,31 @@ function Developer() {
   return (
     <>
       <Navbar />
+      <style>
+  {`
+    @keyframes pulse {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+  `}
+</style>
 
       <div style={{ textAlign: "center", marginTop: "40px", marginBottom: "40px" }}>
         <h1 style={{ color: "#2563eb", fontSize: "36px", fontWeight: "bold" }}>
           Project Documentation
         </h1>
 
-        <p style={{ color: "#6b7280", fontSize: "18px" }}>
-          Built by Joel Kalala — Full-Stack MERN Developer
-        </p>
+       <p
+  style={{
+    color: "#6b7280",
+    fontSize: "18px",
+    letterSpacing: "1px",
+    animation: "pulse 2s infinite",
+  }}
+>
+  Building technology solutions for the Congolese community 🚀
+</p>
       </div>
 
       <div style={{ padding: "40px", maxWidth: "1000px", margin: "auto", color: "white" }}>
