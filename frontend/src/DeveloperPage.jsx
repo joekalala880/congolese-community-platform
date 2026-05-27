@@ -102,7 +102,17 @@ function Developer() {
           <h2>📬 Contact & Portfolio</h2>
           <p><strong>Developer:</strong> Joel Kalala</p>
           <p><strong>Email:</strong> kalalajoel27@gmail.com</p>
-          <p><strong>GitHub:</strong> joekalala880</p>
+         <p>
+  <strong>GitHub:</strong>{" "}
+  <a
+    href="https://github.com/joekalala880"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ color: "#60a5fa", textDecoration: "underline" }}
+  >
+    joekalala880
+  </a>
+</p>
           <p><strong>Project Type:</strong> Full-Stack MERN Community Support Platform</p>
         </div>
         <div
