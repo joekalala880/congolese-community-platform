@@ -105,6 +105,27 @@ function Developer() {
           <p><strong>GitHub:</strong> joekalala880</p>
           <p><strong>Project Type:</strong> Full-Stack MERN Community Support Platform</p>
         </div>
+        <div
+  style={{
+    backgroundColor: "#1f2937",
+    padding: "30px",
+    borderRadius: "15px",
+    marginBottom: "30px",
+  }}
+>
+  <h2>🚀 Future Improvements</h2>
+
+  <ul>
+    <li>MongoDB Atlas production database</li>
+    <li>Backend deployment on Render or Railway</li>
+    <li>JWT protected API</li>
+    <li>Admin analytics dashboard</li>
+    <li>Email notifications</li>
+    <li>File uploads for request documents</li>
+    <li>AI chatbot helper</li>
+    <li>Community announcements system</li>
+  </ul>
+</div>
       </div>
     </>
   );
