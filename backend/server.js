@@ -10,7 +10,17 @@ const healthcareRoutes = require("./routes/healthcareRoutes");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://congolese-community-platform.vercel.app",
+      "http://localhost:5173"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true
+  })
+);
+
 app.use(express.json());
 
 connectDB();
@@ -23,10 +33,6 @@ app.use("/api/healthcare", healthcareRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to Congolese Community Support System");
-});
-
-app.get("/test-housing", (req, res) => {
-  res.send("Housing route test works");
 });
 
 const PORT = process.env.PORT || 3001;
