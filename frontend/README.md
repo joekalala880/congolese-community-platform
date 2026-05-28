@@ -1,16 +1,77 @@
-# React + Vite
+# Congolese Community Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+The Congolese Community Platform is a full-stack MERN web application created to support community members by providing digital access to important services.
 
-Currently, two official plugins are available:
+The platform allows users to request:
+- Housing assistance
+- Food support
+- Healthcare support
+- Immigration assistance
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This project was designed to make community support easier to access while helping administrators organize requests through a modern digital system.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Main Features
 
-## Expanding the ESLint configuration
+### User Features
+- User registration and login
+- Secure authentication system
+- Submit support requests
+- Mobile responsive interface
+- Personal dashboard
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Admin Features
+- Admin dashboard
+- Manage user requests
+- Role-based access control
+- Organized community support management
+
+### Developer Portfolio Features
+- GitHub integration
+- LinkedIn integration
+- Resume download
+- Project documentation page
+
+---
+
+## Technologies Used
+
+### Frontend
+- React.js
+- Vite
+- React Router
+- CSS
+
+### Backend
+- Node.js
+- Express.js
+
+### Database
+- MongoDB
+
+### Deployment
+- Vercel
+- GitHub
+
+---
+
+## Purpose of the Project
+The purpose of this project is to use technology to improve access to support services for the Congolese community and demonstrate full-stack software engineering skills.
+
+---
+
+## Developer
+Joel Kalala
+
+GitHub:
+https://github.com/joekalala880
+
+LinkedIn:
+https://www.linkedin.com/in/joel-kalala1-079492293/
+
+---
+
+## Live Website
+https://congolese-community-platform.vercel.app
