@@ -23,7 +23,7 @@ function Immigration() {
 
   const submitImmigrationRequest = async () => {
     try {
-      await axios.post("http://127.0.0.1:3001/api/immigration/request", {
+      await axios.post("https://congolese-community-platform.onrender.com/api/immigration/request", {
         userName: user?.firstName,
         userEmail: user?.email,
         ...formData

@@ -23,7 +23,7 @@ function Healthcare() {
 
   const submitHealthcareRequest = async () => {
     try {
-      await axios.post("http://127.0.0.1:3001/api/healthcare/request", {
+      await axios.post("https://congolese-community-platform.onrender.com/api/healthcare/request", {
         userName: user?.firstName,
         userEmail: user?.email,
         ...formData

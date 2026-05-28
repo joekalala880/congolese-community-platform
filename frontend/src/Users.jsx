@@ -21,7 +21,7 @@ function Users() {
   }, []);
 
   const fetchUsers = () => {
-    fetch("http://127.0.0.1:3001/api/auth/users")
+    fetch("https://congolese-community-platform.onrender.com/api/auth/users/${id}")
       .then((res) => res.json())
       .then((data) => {
         console.log("USERS DATA:", data);
@@ -36,7 +36,7 @@ function Users() {
   const deleteUser = async (id) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:3001/api/auth/users/${id}`,
+        `https://congolese-community-platform.onrender.com/api/auth/users/${id}`,
         {
           method: "DELETE"
         }
@@ -56,7 +56,7 @@ function Users() {
   const updateRole = async (id, role) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:3001/api/auth/users/${id}/role`,
+       "https://congolese-community-platform.onrender.com/api/auth/users/${id}/role",
         {
           method: "PUT",
           headers: {

@@ -22,10 +22,10 @@ function MyRequests() {
 
   const fetchRequests = async () => {
     try {
-      const housingResponse = await axios.get("http://127.0.0.1:3001/api/housing/requests");
-      const foodResponse = await axios.get("http://127.0.0.1:3001/api/food/requests");
-      const immigrationResponse = await axios.get("http://127.0.0.1:3001/api/immigration/requests");
-      const healthcareResponse = await axios.get("http://127.0.0.1:3001/api/healthcare/requests");
+      const housingResponse = await axios.get("https://congolese-community-platform.onrender.com/api/housing/requests");
+      const foodResponse = await axios.get("https://congolese-community-platform.onrender.com/api/food/requests");
+      const immigrationResponse = await axios.get("https://congolese-community-platform.onrender.com/api/immigration/requests");
+      const healthcareResponse = await axios.get("https://congolese-community-platform.onrender.com/api/healthcare/requests");
 
       const myHousingRequests = housingResponse.data.filter((request) => request.userEmail === user?.email);
       const myFoodRequests = foodResponse.data.filter((request) => request.userEmail === user?.email);
@@ -62,7 +62,7 @@ function MyRequests() {
       const service = request.service.toLowerCase();
 
       await axios.delete(
-        `http://127.0.0.1:3001/api/${service}/request/${request._id}`
+        `https://congolese-community-platform.onrender.com/api/${service}/request/${request._id}`
       );
 
       setAllRequests(allRequests.filter((item) => item._id !== request._id));

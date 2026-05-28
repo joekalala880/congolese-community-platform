@@ -24,7 +24,7 @@ function Housing() {
 
   const submitHousingRequest = async () => {
     try {
-      await axios.post("http://127.0.0.1:3001/api/housing/request", {
+      await axios.post("https://congolese-community-platform.onrender.com/api/housing/request", {
         userName: user?.firstName,
         userEmail: user?.email,
         ...formData

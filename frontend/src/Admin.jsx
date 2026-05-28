@@ -36,11 +36,11 @@ function Admin() {
 
   const fetchAllRequests = async () => {
     try {
-      const usersResponse = await axios.get("http://127.0.0.1:3001/api/auth/users");
-      const housing = await axios.get("http://127.0.0.1:3001/api/housing/requests");
-      const immigration = await axios.get("http://127.0.0.1:3001/api/immigration/requests");
-      const food = await axios.get("http://127.0.0.1:3001/api/food/requests");
-      const healthcare = await axios.get("http://127.0.0.1:3001/api/healthcare/requests");
+      const usersResponse = await axios.get("https://congolese-community-platform.onrender.com/api/auth/users");
+      const housing = await axios.get("https://congolese-community-platform.onrender.com/api/housing/requests");
+      const immigration = await axios.get("https://congolese-community-platform.onrender.com/api/immigration/requests");
+      const food = await axios.get("https://congolese-community-platform.onrender.com/api/food/requests");
+      const healthcare = await axios.get("https://congolese-community-platform.onrender.com/api/healthcare/requests");
 
       setUsers(usersResponse.data);
       setHousingRequests(housing.data);
@@ -56,7 +56,7 @@ function Admin() {
   const resolveRequest = async (service, id) => {
     try {
       const response = await axios.put(
-        `http://127.0.0.1:3001/api/${service}/request/${id}`
+        `https://congolese-community-platform.onrender.com/api/${service}/request/${id}`
       );
       toast.success(response.data.message);
       fetchAllRequests();
@@ -69,7 +69,7 @@ function Admin() {
   const deleteRequest = async (service, id) => {
     try {
       const response = await axios.delete(
-        `http://127.0.0.1:3001/api/${service}/request/${id}`
+        "https://congolese-community-platform.onrender.com/api/${service}/request/${id}"
       );
       toast.success(response.data.message);
       fetchAllRequests();

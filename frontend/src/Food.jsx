@@ -25,7 +25,7 @@ function Food() {
   const submitFoodRequest = async () => {
     try {
       setLoading(true);
-      await axios.post("http://127.0.0.1:3001/api/food/request", {
+      await axios.post("https://congolese-community-platform.onrender.com/api/food/request", {
         userName: user?.firstName,
         userEmail: user?.email,
         ...formData
