@@ -20,18 +20,19 @@ function Register() {
   };
 
   const registerUser = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/api/auth/register",
-        registerData
-      );
+  try {
+    const response = await axios.post(
+      "http://localhost:3001/api/auth/register",
+      registerData
+    );
 
-      alert(response.data.message);
-      window.location.href = "/";
-    } catch (error) {
-      alert("Registration failed");
-    }
-  };
+    alert(response.data.message);
+    window.location.href = "/";
+  } catch (error) {
+    console.log("Registration error:", error);
+    alert(error.response?.data?.message || "Registration failed");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
