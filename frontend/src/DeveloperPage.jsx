@@ -324,6 +324,37 @@ function Developer() {
         </div>
 
         <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
+
+          <div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}>
+  <h2>🎥 Live Platform Demo</h2>
+
+  <p>
+    Explore the live Congolese Community Platform deployed online with
+    authentication, request management, and community support features.
+  </p>
+
+  <div style={{ marginTop: "20px" }}>
+    <a
+      href="https://congolese-community-platform.vercel.app"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        backgroundColor: "#2563eb",
+        color: "white",
+        padding: "12px 24px",
+        borderRadius: "10px",
+        textDecoration: "none",
+        display: "inline-block",
+        transition: "0.3s",
+        cursor: "pointer",
+      }}
+    >
+      Launch Live Platform 🚀
+    </a>
+  </div>
+</div>
+
+<div style={cardStyle} onMouseOver={hoverUp} onMouseOut={hoverDown}></div>
           <h2>🟢 System Status</h2>
 
           <p>✅ Frontend Deployment: Online</p>
