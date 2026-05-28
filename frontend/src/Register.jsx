@@ -21,10 +21,10 @@ function Register() {
 
   const registerUser = async () => {
   try {
-    const response = await axios.post(
-      "http://localhost:3001/api/auth/register",
-      registerData
-    );
+   const response = await axios.post(
+  "https://congolese-community-platform.onrender.com/api/auth/register",
+  registerData
+);
 
     alert(response.data.message);
     window.location.href = "/";
