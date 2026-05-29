@@ -2,22 +2,26 @@ const HealthcareRequest = require("../models/HealthcareRequest");
 
 const createHealthcareRequest = async (req, res) => {
   try {
-    const {
-      userEmail,
-      userName,
-      healthNeed,
-      urgency,
-      description
-    } = req.body;
-
-    const request = await HealthcareRequest.create({
-      userEmail,
-      userName,
-      healthNeed,
-      urgency,
-      description
-    });
-
+   const {
+  userEmail,
+  userName,
+  address,
+  needType,
+  urgency,
+  description,
+  fileUrl,
+  fileName
+} = req.body;
+  const request = await HousingRequest.create({
+  userEmail,
+  userName,
+  address,
+  needType,
+  urgency,
+  description,
+  fileUrl,
+  fileName
+});
     res.status(201).json({
       message: "Healthcare request submitted successfully",
       request

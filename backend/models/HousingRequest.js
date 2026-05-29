@@ -32,6 +32,16 @@ const housingRequestSchema = new mongoose.Schema(
       required: true
     },
 
+    fileUrl: {
+      type: String,
+      default: ""
+    },
+
+    fileName: {
+      type: String,
+      default: ""
+    },
+
     status: {
       type: String,
       default: "Pending"
