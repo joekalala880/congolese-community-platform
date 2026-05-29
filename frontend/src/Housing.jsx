@@ -3,8 +3,12 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
 
+const API_URL = "https://congolese-community-platform.onrender.com";
+
 function Housing() {
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(null);
+
   const user = JSON.parse(localStorage.getItem("user"));
   const darkMode = localStorage.getItem("darkMode") === "true";
 
@@ -24,10 +28,31 @@ function Housing() {
 
   const submitHousingRequest = async () => {
     try {
-      await axios.post("https://congolese-community-platform.onrender.com/api/housing/request", {
+      setLoading(true);
+
+      let uploadedFileUrl = "";
+      let uploadedFileName = "";
+
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+
+        const uploadResponse = await axios.post(`${API_URL}/api/upload`, uploadData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+
+        uploadedFileUrl = uploadResponse.data.fileUrl;
+        uploadedFileName = uploadResponse.data.fileName;
+      }
+
+      await axios.post(`${API_URL}/api/housing/request`, {
         userName: user?.firstName,
         userEmail: user?.email,
-        ...formData
+        ...formData,
+        fileUrl: uploadedFileUrl,
+        fileName: uploadedFileName
       });
 
       toast.success("Housing request submitted successfully");
@@ -38,9 +63,13 @@ function Housing() {
         urgency: "",
         description: ""
       });
+
+      setFile(null);
     } catch (error) {
       console.log(error);
-   toast.error("Failed to submit housing request");
+      toast.error("Failed to submit housing request");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,22 +149,39 @@ function Housing() {
             }}
           />
 
+          <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
+            Upload document optional
+          </label>
+
+          <input
+            type="file"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+            onChange={(e) => setFile(e.target.files[0])}
+            style={inputStyle}
+          />
+
+          {file && (
+            <p style={{ marginBottom: "15px", color: "#2563eb" }}>
+              Selected file: {file.name}
+            </p>
+          )}
+
           <button
             onClick={submitHousingRequest}
-             disabled={loading}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "14px",
-              backgroundColor: "#2563eb",
+              backgroundColor: loading ? "#9ca3af" : "#2563eb",
               color: "white",
               border: "none",
               borderRadius: "10px",
               fontWeight: "bold",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               marginTop: "10px"
             }}
           >
-           {loading ? "Submitting..." : "Submit Housing Request"}
+            {loading ? "Submitting..." : "Submit Housing Request"}
           </button>
 
           <button
