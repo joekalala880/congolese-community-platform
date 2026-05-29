@@ -3,8 +3,12 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
 
+const API_URL = "https://congolese-community-platform.onrender.com";
+
 function Food() {
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(null);
+
   const user = JSON.parse(localStorage.getItem("user"));
   const darkMode = localStorage.getItem("darkMode") === "true";
 
@@ -25,14 +29,33 @@ function Food() {
   const submitFoodRequest = async () => {
     try {
       setLoading(true);
-      await axios.post("https://congolese-community-platform.onrender.com/api/food/request", {
+
+      let uploadedFileUrl = "";
+      let uploadedFileName = "";
+
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+
+        const uploadResponse = await axios.post(`${API_URL}/api/upload`, uploadData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+
+        uploadedFileUrl = uploadResponse.data.fileUrl;
+        uploadedFileName = uploadResponse.data.fileName;
+      }
+
+      await axios.post(`${API_URL}/api/food/request`, {
         userName: user?.firstName,
         userEmail: user?.email,
-        ...formData
+        ...formData,
+        fileUrl: uploadedFileUrl,
+        fileName: uploadedFileName
       });
 
       toast.success("Food request submitted successfully");
-      setLoading(false);
 
       setFormData({
         foodNeed: "",
@@ -40,11 +63,13 @@ function Food() {
         urgency: "",
         description: ""
       });
+
+      setFile(null);
     } catch (error) {
-      setLoading(false);
       console.log(error);
-     toast.error("Failed to submit food request");
-     setLoading(false);
+      toast.error("Failed to submit food request");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -124,21 +149,39 @@ function Food() {
             }}
           />
 
+          <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
+            Upload document optional
+          </label>
+
+          <input
+            type="file"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+            onChange={(e) => setFile(e.target.files[0])}
+            style={inputStyle}
+          />
+
+          {file && (
+            <p style={{ marginBottom: "15px", color: "#16a34a" }}>
+              Selected file: {file.name}
+            </p>
+          )}
+
           <button
             onClick={submitFoodRequest}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "14px",
-              backgroundColor: "#16a34a",
+              backgroundColor: loading ? "#9ca3af" : "#16a34a",
               color: "white",
               border: "none",
               borderRadius: "10px",
               fontWeight: "bold",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               marginTop: "10px"
             }}
           >
-         {loading ? "Submitting..." : "Submit Food Request"}
+            {loading ? "Submitting..." : "Submit Food Request"}
           </button>
 
           <button
