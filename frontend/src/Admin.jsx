@@ -11,6 +11,8 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
 
+const API_URL = "https://congolese-community-platform.onrender.com";
+
 function Admin() {
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -27,20 +29,32 @@ function Admin() {
   const [immigrationRequests, setImmigrationRequests] = useState([]);
   const [foodRequests, setFoodRequests] = useState([]);
   const [healthcareRequests, setHealthcareRequests] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
 
   const darkMode = localStorage.getItem("darkMode") === "true";
 
   useEffect(() => {
+    fetchAnalytics();
     fetchAllRequests();
   }, []);
 
+  const fetchAnalytics = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/analytics/summary`);
+      setAnalytics(response.data);
+    } catch (error) {
+      console.log("Analytics error:", error);
+      toast.error("Failed to load analytics");
+    }
+  };
+
   const fetchAllRequests = async () => {
     try {
-      const usersResponse = await axios.get("https://congolese-community-platform.onrender.com/api/auth/users");
-      const housing = await axios.get("https://congolese-community-platform.onrender.com/api/housing/requests");
-      const immigration = await axios.get("https://congolese-community-platform.onrender.com/api/immigration/requests");
-      const food = await axios.get("https://congolese-community-platform.onrender.com/api/food/requests");
-      const healthcare = await axios.get("https://congolese-community-platform.onrender.com/api/healthcare/requests");
+      const usersResponse = await axios.get(`${API_URL}/api/auth/users`);
+      const housing = await axios.get(`${API_URL}/api/housing/requests`);
+      const immigration = await axios.get(`${API_URL}/api/immigration/requests`);
+      const food = await axios.get(`${API_URL}/api/food/requests`);
+      const healthcare = await axios.get(`${API_URL}/api/healthcare/requests`);
 
       setUsers(usersResponse.data);
       setHousingRequests(housing.data);
@@ -55,10 +69,9 @@ function Admin() {
 
   const resolveRequest = async (service, id) => {
     try {
-      const response = await axios.put(
-        `https://congolese-community-platform.onrender.com/api/${service}/request/${id}`
-      );
+      const response = await axios.put(`${API_URL}/api/${service}/request/${id}`);
       toast.success(response.data.message);
+      fetchAnalytics();
       fetchAllRequests();
     } catch (error) {
       console.log(error);
@@ -68,10 +81,9 @@ function Admin() {
 
   const deleteRequest = async (service, id) => {
     try {
-      const response = await axios.delete(
-        "https://congolese-community-platform.onrender.com/api/${service}/request/${id}"
-      );
+      const response = await axios.delete(`${API_URL}/api/${service}/request/${id}`);
       toast.success(response.data.message);
+      fetchAnalytics();
       fetchAllRequests();
     } catch (error) {
       console.log(error);
@@ -80,8 +92,8 @@ function Admin() {
   };
 
   const statCard = {
-    backgroundColor: "white",
-    color: "black",
+    backgroundColor: darkMode ? "#1f2937" : "white",
+    color: darkMode ? "white" : "black",
     padding: "25px",
     borderRadius: "15px",
     boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -89,8 +101,8 @@ function Admin() {
   };
 
   const requestCard = {
-    backgroundColor: "white",
-    color: "black",
+    backgroundColor: darkMode ? "#1f2937" : "white",
+    color: darkMode ? "white" : "black",
     padding: "20px",
     marginBottom: "15px",
     borderRadius: "12px",
@@ -107,10 +119,10 @@ function Admin() {
   };
 
   const chartData = [
-    { name: "Housing", requests: housingRequests.length },
-    { name: "Immigration", requests: immigrationRequests.length },
-    { name: "Food", requests: foodRequests.length },
-    { name: "Healthcare", requests: healthcareRequests.length }
+    { name: "Housing", requests: analytics?.housingRequests || housingRequests.length },
+    { name: "Immigration", requests: analytics?.immigrationRequests || immigrationRequests.length },
+    { name: "Food", requests: analytics?.foodRequests || foodRequests.length },
+    { name: "Healthcare", requests: analytics?.healthcareRequests || healthcareRequests.length }
   ];
 
   return (
@@ -139,34 +151,39 @@ function Admin() {
         >
           <div style={statCard}>
             <h3>Total Users</h3>
-            <h1>{users.length}</h1>
+            <h1>{analytics?.totalUsers ?? users.length}</h1>
+          </div>
+
+          <div style={statCard}>
+            <h3>Total Requests</h3>
+            <h1>{analytics?.totalRequests ?? 0}</h1>
           </div>
 
           <div style={statCard}>
             <h3>Housing</h3>
-            <h1>{housingRequests.length}</h1>
+            <h1>{analytics?.housingRequests ?? housingRequests.length}</h1>
           </div>
 
           <div style={statCard}>
             <h3>Immigration</h3>
-            <h1>{immigrationRequests.length}</h1>
+            <h1>{analytics?.immigrationRequests ?? immigrationRequests.length}</h1>
           </div>
 
           <div style={statCard}>
             <h3>Food</h3>
-            <h1>{foodRequests.length}</h1>
+            <h1>{analytics?.foodRequests ?? foodRequests.length}</h1>
           </div>
 
           <div style={statCard}>
             <h3>Healthcare</h3>
-            <h1>{healthcareRequests.length}</h1>
+            <h1>{analytics?.healthcareRequests ?? healthcareRequests.length}</h1>
           </div>
         </div>
 
         <div
           style={{
-            backgroundColor: "white",
-            color: "black",
+            backgroundColor: darkMode ? "#1f2937" : "white",
+            color: darkMode ? "white" : "black",
             padding: "25px",
             borderRadius: "15px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
