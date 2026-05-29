@@ -153,6 +153,15 @@ function Developer() {
           <a href="https://www.linkedin.com/in/joel-kalala1-079492293" target="_blank" rel="noopener noreferrer" style={{ ...buttonStyle, backgroundColor: "#0a66c2" }}>
             LinkedIn
           </a>{" "}
+          <a
+  href="/Joel-Kalala-Resume.pdf"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{ ...buttonStyle, backgroundColor: "#7c3aed" }}
+>
+  Resume
+</a>{" "}
+        
 
           <a href="/dashboard" style={{ ...buttonStyle, backgroundColor: "#16a34a" }}>
             Open Dashboard
