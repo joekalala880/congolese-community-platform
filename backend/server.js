@@ -8,6 +8,7 @@ const immigrationRoutes = require("./routes/immigrationRoutes");
 const foodRoutes = require("./routes/foodRoutes");
 const healthcareRoutes = require("./routes/healthcareRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(
 app.use(express.json());
 
 connectDB();
+app.use("/api/upload", uploadRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/housing", housingRoutes);
