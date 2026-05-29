@@ -3,8 +3,12 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
 
+const API_URL = "https://congolese-community-platform.onrender.com";
+
 function Healthcare() {
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(null);
+
   const user = JSON.parse(localStorage.getItem("user"));
   const darkMode = localStorage.getItem("darkMode") === "true";
 
@@ -23,22 +27,47 @@ function Healthcare() {
 
   const submitHealthcareRequest = async () => {
     try {
-      await axios.post("https://congolese-community-platform.onrender.com/api/healthcare/request", {
+      setLoading(true);
+
+      let uploadedFileUrl = "";
+      let uploadedFileName = "";
+
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+
+        const uploadResponse = await axios.post(`${API_URL}/api/upload`, uploadData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+
+        uploadedFileUrl = uploadResponse.data.fileUrl;
+        uploadedFileName = uploadResponse.data.fileName;
+      }
+
+      await axios.post(`${API_URL}/api/healthcare/request`, {
         userName: user?.firstName,
         userEmail: user?.email,
-        ...formData
+        ...formData,
+        fileUrl: uploadedFileUrl,
+        fileName: uploadedFileName
       });
 
-     toast.success("Healthcare request submitted successfully");
+      toast.success("Healthcare request submitted successfully");
 
       setFormData({
         healthNeed: "",
         urgency: "",
         description: ""
       });
+
+      setFile(null);
     } catch (error) {
       console.log(error);
-toast.error("Failed to submit healthcare request");
+      toast.error("Failed to submit healthcare request");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,21 +140,39 @@ toast.error("Failed to submit healthcare request");
             }}
           />
 
+          <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
+            Upload document optional
+          </label>
+
+          <input
+            type="file"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+            onChange={(e) => setFile(e.target.files[0])}
+            style={inputStyle}
+          />
+
+          {file && (
+            <p style={{ marginBottom: "15px", color: "#dc2626" }}>
+              Selected file: {file.name}
+            </p>
+          )}
+
           <button
             onClick={submitHealthcareRequest}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "14px",
-              backgroundColor: "#dc2626",
+              backgroundColor: loading ? "#9ca3af" : "#dc2626",
               color: "white",
               border: "none",
               borderRadius: "10px",
               fontWeight: "bold",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               marginTop: "10px"
             }}
           >
-           {loading ? "Submitting..." : "Submit Healthcare Request"}
+            {loading ? "Submitting..." : "Submit Healthcare Request"}
           </button>
 
           <button
@@ -139,7 +186,7 @@ toast.error("Failed to submit healthcare request");
               border: "none",
               borderRadius: "10px",
               fontWeight: "bold",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               marginTop: "15px"
             }}
           >
