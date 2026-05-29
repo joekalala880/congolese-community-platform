@@ -3,8 +3,12 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
 
+const API_URL = "https://congolese-community-platform.onrender.com";
+
 function Immigration() {
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(null);
+
   const user = JSON.parse(localStorage.getItem("user"));
   const darkMode = localStorage.getItem("darkMode") === "true";
 
@@ -23,22 +27,47 @@ function Immigration() {
 
   const submitImmigrationRequest = async () => {
     try {
-      await axios.post("https://congolese-community-platform.onrender.com/api/immigration/request", {
+      setLoading(true);
+
+      let uploadedFileUrl = "";
+      let uploadedFileName = "";
+
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+
+        const uploadResponse = await axios.post(`${API_URL}/api/upload`, uploadData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
+
+        uploadedFileUrl = uploadResponse.data.fileUrl;
+        uploadedFileName = uploadResponse.data.fileName;
+      }
+
+      await axios.post(`${API_URL}/api/immigration/request`, {
         userName: user?.firstName,
         userEmail: user?.email,
-        ...formData
+        ...formData,
+        fileUrl: uploadedFileUrl,
+        fileName: uploadedFileName
       });
 
-   toast.success("Immigration request submitted successfully");
+      toast.success("Immigration request submitted successfully");
 
       setFormData({
         caseType: "",
         urgency: "",
         description: ""
       });
+
+      setFile(null);
     } catch (error) {
       console.log(error);
       toast.error("Failed to submit immigration request");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,22 +141,39 @@ function Immigration() {
             }}
           />
 
+          <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
+            Upload document optional
+          </label>
+
+          <input
+            type="file"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+            onChange={(e) => setFile(e.target.files[0])}
+            style={inputStyle}
+          />
+
+          {file && (
+            <p style={{ marginBottom: "15px", color: "#2563eb" }}>
+              Selected file: {file.name}
+            </p>
+          )}
+
           <button
             onClick={submitImmigrationRequest}
-              disabled={loading}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "14px",
-              backgroundColor: "#2563eb",
+              backgroundColor: loading ? "#9ca3af" : "#2563eb",
               color: "white",
               border: "none",
               borderRadius: "10px",
               fontWeight: "bold",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               marginTop: "10px"
             }}
           >
-           {loading ? "Submitting..." : "Submit Immigration Request"}
+            {loading ? "Submitting..." : "Submit Immigration Request"}
           </button>
 
           <button
