@@ -7,7 +7,7 @@ const housingRoutes = require("./routes/housingRoutes");
 const immigrationRoutes = require("./routes/immigrationRoutes");
 const foodRoutes = require("./routes/foodRoutes");
 const healthcareRoutes = require("./routes/healthcareRoutes");
-const analyticsRoutes = require("./routes/analyticsRoutes")
+const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
 
