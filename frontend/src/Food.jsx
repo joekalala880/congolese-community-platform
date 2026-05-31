@@ -42,19 +42,26 @@ function Food() {
         const uploadData = new FormData();
         uploadData.append("file", file);
 
-        const uploadResponse = await axios.post(`${API_URL}/api/upload`, uploadData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
+        const uploadResponse = await axios.post(
+          `${API_URL}/api/upload`,
+          uploadData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
           }
-        });
+        );
 
-        uploadedFileUrl = uploadResponse.data.fileUrl;
-        uploadedFileName = uploadResponse.data.fileName;
+        uploadedFileUrl = uploadResponse.data.fileUrl || "";
+        uploadedFileName = uploadResponse.data.fileName || "";
+
+        console.log("Uploaded file URL:", uploadedFileUrl);
+        console.log("Uploaded file name:", uploadedFileName);
       }
 
       await axios.post(`${API_URL}/api/food/request`, {
-        userName: user?.firstName,
-        userEmail: user?.email,
+        userName: user?.firstName || "Unknown",
+        userEmail: user?.email || "Unknown",
         foodNeed: formData.foodNeed,
         householdSize: formData.householdSize,
         urgency: formData.urgency,
@@ -74,7 +81,7 @@ function Food() {
 
       setFile(null);
     } catch (error) {
-      console.log(error);
+      console.log("FOOD SUBMIT ERROR:", error);
       toast.error(error.response?.data?.message || "Failed to submit food request");
     } finally {
       setLoading(false);
@@ -164,7 +171,7 @@ function Food() {
           <input
             type="file"
             accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.webp"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => setFile(e.target.files[0] || null)}
             style={inputStyle}
           />
 

@@ -2,26 +2,15 @@ const FoodRequest = require("../models/FoodRequest");
 
 const createFoodRequest = async (req, res) => {
   try {
-    const {
-      userEmail,
-      userName,
-      foodNeed,
-      householdSize,
-      urgency,
-      description,
-      fileUrl,
-      fileName
-    } = req.body;
-
     const request = await FoodRequest.create({
-      userEmail,
-      userName,
-      foodNeed,
-      householdSize,
-      urgency,
-      description,
-      fileUrl,
-      fileName
+      userEmail: req.body.userEmail,
+      userName: req.body.userName,
+      foodNeed: req.body.foodNeed,
+      householdSize: req.body.householdSize,
+      urgency: req.body.urgency,
+      description: req.body.description,
+      fileUrl: req.body.fileUrl || "",
+      fileName: req.body.fileName || ""
     });
 
     res.status(201).json({
@@ -39,7 +28,6 @@ const getFoodRequests = async (req, res) => {
     const requests = await FoodRequest.find().sort({ createdAt: -1 });
     res.status(200).json(requests);
   } catch (error) {
-    console.error("FOOD GET ERROR:", error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -49,7 +37,6 @@ const deleteFoodRequest = async (req, res) => {
     await FoodRequest.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Request deleted successfully" });
   } catch (error) {
-    console.error("FOOD DELETE ERROR:", error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -67,7 +54,6 @@ const updateFoodRequestStatus = async (req, res) => {
       request
     });
   } catch (error) {
-    console.error("FOOD UPDATE ERROR:", error.message);
     res.status(500).json({ message: error.message });
   }
 };

@@ -8,10 +8,8 @@ const foodRequestSchema = new mongoose.Schema(
     householdSize: { type: String, required: true },
     urgency: { type: String, required: true },
     description: { type: String, required: true },
-
     fileUrl: { type: String, default: "" },
     fileName: { type: String, default: "" },
-
     status: { type: String, default: "Pending" }
   },
   { timestamps: true }
