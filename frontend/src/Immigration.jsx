@@ -27,6 +27,11 @@ function Immigration() {
 
   const submitImmigrationRequest = async () => {
     try {
+      if (!formData.caseType || !formData.urgency || !formData.description) {
+        toast.error("Please fill all fields");
+        return;
+      }
+
       setLoading(true);
 
       let uploadedFileUrl = "";
@@ -36,20 +41,26 @@ function Immigration() {
         const uploadData = new FormData();
         uploadData.append("file", file);
 
-        const uploadResponse = await axios.post(`${API_URL}/api/upload`, uploadData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
+        const uploadResponse = await axios.post(
+          `${API_URL}/api/upload`,
+          uploadData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
           }
-        });
+        );
 
-        uploadedFileUrl = uploadResponse.data.fileUrl;
-        uploadedFileName = uploadResponse.data.fileName;
+        uploadedFileUrl = uploadResponse.data.fileUrl || "";
+        uploadedFileName = uploadResponse.data.fileName || "";
       }
 
       await axios.post(`${API_URL}/api/immigration/request`, {
-        userName: user?.firstName,
-        userEmail: user?.email,
-        ...formData,
+        userName: user?.firstName || "Unknown",
+        userEmail: user?.email || "Unknown",
+        caseType: formData.caseType,
+        urgency: formData.urgency,
+        description: formData.description,
         fileUrl: uploadedFileUrl,
         fileName: uploadedFileName
       });
@@ -64,8 +75,8 @@ function Immigration() {
 
       setFile(null);
     } catch (error) {
-      console.log(error);
-      toast.error("Failed to submit immigration request");
+      console.log("IMMIGRATION SUBMIT ERROR:", error);
+      toast.error(error.response?.data?.message || "Failed to submit immigration request");
     } finally {
       setLoading(false);
     }
@@ -147,8 +158,8 @@ function Immigration() {
 
           <input
             type="file"
-            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-            onChange={(e) => setFile(e.target.files[0])}
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.webp"
+            onChange={(e) => setFile(e.target.files[0] || null)}
             style={inputStyle}
           />
 
@@ -177,7 +188,8 @@ function Immigration() {
           </button>
 
           <button
-            onClick={() => window.location.href = "/dashboard"}
+            onClick={() => (window.location.href = "/dashboard")}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "14px",
@@ -186,7 +198,7 @@ function Immigration() {
               border: "none",
               borderRadius: "10px",
               fontWeight: "bold",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               marginTop: "15px"
             }}
           >
