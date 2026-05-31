@@ -4,7 +4,7 @@ const {
   createFoodRequest,
   getFoodRequests,
   deleteFoodRequest,
-  resolveFoodRequest
+  updateFoodRequestStatus
 } = require("../controllers/foodController");
 
 const router = express.Router();
@@ -19,6 +19,6 @@ router.get("/requests", getFoodRequests);
 
 router.delete("/request/:id", deleteFoodRequest);
 
-router.put("/request/:id", resolveFoodRequest);
+router.put("/request/:id", updateFoodRequestStatus);
 
 module.exports = router;
