@@ -28,6 +28,11 @@ function Food() {
 
   const submitFoodRequest = async () => {
     try {
+      if (!formData.foodNeed || !formData.householdSize || !formData.urgency || !formData.description) {
+        toast.error("Please fill all fields");
+        return;
+      }
+
       setLoading(true);
 
       let uploadedFileUrl = "";
@@ -50,7 +55,10 @@ function Food() {
       await axios.post(`${API_URL}/api/food/request`, {
         userName: user?.firstName,
         userEmail: user?.email,
-        ...formData,
+        foodNeed: formData.foodNeed,
+        householdSize: formData.householdSize,
+        urgency: formData.urgency,
+        description: formData.description,
         fileUrl: uploadedFileUrl,
         fileName: uploadedFileName
       });
@@ -67,7 +75,7 @@ function Food() {
       setFile(null);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to submit food request");
+      toast.error(error.response?.data?.message || "Failed to submit food request");
     } finally {
       setLoading(false);
     }
@@ -155,7 +163,7 @@ function Food() {
 
           <input
             type="file"
-            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.webp"
             onChange={(e) => setFile(e.target.files[0])}
             style={inputStyle}
           />
@@ -185,7 +193,8 @@ function Food() {
           </button>
 
           <button
-            onClick={() => window.location.href = "/dashboard"}
+            onClick={() => (window.location.href = "/dashboard")}
+            disabled={loading}
             style={{
               width: "100%",
               padding: "14px",
@@ -194,7 +203,7 @@ function Food() {
               border: "none",
               borderRadius: "10px",
               fontWeight: "bold",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               marginTop: "15px"
             }}
           >
