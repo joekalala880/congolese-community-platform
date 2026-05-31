@@ -205,6 +205,20 @@ function Admin() {
         </div>
 
         <h2>Housing Requests</h2>
+
+{request.fileUrl && (
+  <p>
+    <strong>Uploaded File:</strong>{" "}
+    <a
+      href={request.fileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: "#2563eb", fontWeight: "bold" }}
+    >
+      View Document
+    </a>
+  </p>
+)}
         {housingRequests.map((request) => (
           <div key={request._id} style={requestCard}>
             <p><strong>Name:</strong> {request.userName}</p>
@@ -213,6 +227,21 @@ function Admin() {
             <p><strong>Need:</strong> {request.needType}</p>
             <p><strong>Urgency:</strong> {request.urgency}</p>
             <p><strong>Description:</strong> {request.description}</p>
+            {request.fileUrl && (
+  <p>
+    <strong>Uploaded File:</strong>{" "}
+    <a
+      href={request.fileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: "#2563eb", fontWeight: "bold" }}
+    >
+      View Document
+    </a>
+  </p>
+)}
+
+
             <p><strong>Status:</strong> {request.status}</p>
 
             <button onClick={() => resolveRequest("housing", request._id)} style={{ ...buttonStyle, backgroundColor: "green" }}>
@@ -226,6 +255,19 @@ function Admin() {
         ))}
 
         <h2>Immigration Requests</h2>
+        {request.fileUrl && (
+  <p>
+    <strong>Uploaded File:</strong>{" "}
+    <a
+      href={request.fileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: "#2563eb", fontWeight: "bold" }}
+    >
+      View Document
+    </a>
+  </p>
+)}
         {immigrationRequests.map((request) => (
           <div key={request._id} style={requestCard}>
             <p><strong>Name:</strong> {request.userName}</p>
@@ -246,6 +288,20 @@ function Admin() {
         ))}
 
         <h2>Food Requests</h2>
+
+{request.fileUrl && (
+  <p>
+    <strong>Uploaded File:</strong>{" "}
+    <a
+      href={request.fileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: "#2563eb", fontWeight: "bold" }}
+    >
+      View Document
+    </a>
+  </p>
+)}
         {foodRequests.map((request) => (
           <div key={request._id} style={requestCard}>
             <p><strong>Name:</strong> {request.userName}</p>
@@ -267,6 +323,20 @@ function Admin() {
         ))}
 
         <h2>Healthcare Requests</h2>
+
+{request.fileUrl && (
+  <p>
+    <strong>Uploaded File:</strong>{" "}
+    <a
+      href={request.fileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: "#2563eb", fontWeight: "bold" }}
+    >
+      View Document
+    </a>
+  </p>
+)}
         {healthcareRequests.map((request) => (
           <div key={request._id} style={requestCard}>
             <p><strong>Name:</strong> {request.userName}</p>
