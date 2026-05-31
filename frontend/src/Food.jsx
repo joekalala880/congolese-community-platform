@@ -28,8 +28,18 @@ function Food() {
 
   const submitFoodRequest = async () => {
     try {
-      if (!formData.foodNeed || !formData.householdSize || !formData.urgency || !formData.description) {
+      if (
+        !formData.foodNeed ||
+        !formData.householdSize ||
+        !formData.urgency ||
+        !formData.description
+      ) {
         toast.error("Please fill all fields");
+        return;
+      }
+
+      if (isNaN(Number(formData.householdSize)) || Number(formData.householdSize) < 1) {
+        toast.error("Household size must be a valid number");
         return;
       }
 
@@ -54,9 +64,6 @@ function Food() {
 
         uploadedFileUrl = uploadResponse.data.fileUrl || "";
         uploadedFileName = uploadResponse.data.fileName || "";
-
-        console.log("Uploaded file URL:", uploadedFileUrl);
-        console.log("Uploaded file name:", uploadedFileName);
       }
 
       await axios.post(`${API_URL}/api/food/request`, {
@@ -132,10 +139,12 @@ function Food() {
           </select>
 
           <input
+            type="number"
             name="householdSize"
             value={formData.householdSize}
             onChange={handleChange}
             placeholder="Household Size"
+            min="1"
             style={inputStyle}
           />
 
@@ -164,7 +173,13 @@ function Food() {
             }}
           />
 
-          <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
+          <label
+            style={{
+              fontWeight: "bold",
+              display: "block",
+              marginBottom: "8px"
+            }}
+          >
             Upload document optional
           </label>
 
