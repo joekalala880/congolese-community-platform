@@ -21,7 +21,7 @@ function Users() {
   }, []);
 
   const fetchUsers = () => {
-    fetch("https://congolese-community-platform.onrender.com/api/auth/users/${id}")
+  fetch("https://congolese-community-platform.onrender.com/api/users")
       .then((res) => res.json())
       .then((data) => {
         console.log("USERS DATA:", data);
@@ -36,7 +36,7 @@ function Users() {
   const deleteUser = async (id) => {
     try {
       const response = await fetch(
-        `https://congolese-community-platform.onrender.com/api/auth/users/${id}`,
+        `https://congolese-community-platform.onrender.com/api/users/${id}`,
         {
           method: "DELETE"
         }
