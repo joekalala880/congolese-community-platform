@@ -129,6 +129,7 @@ function Users() {
             }}
           >
             <p><strong>Name:</strong> {user.firstName} {user.lastName}</p>
+             {user.firstName} {user.middleName} {user.lastName}
             <p><strong>Email:</strong> {user.email}</p>
             <p><strong>Phone:</strong> {user.phone}</p>
             <p><strong>Concern:</strong> {user.concern}</p>
