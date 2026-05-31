@@ -8,7 +8,9 @@ const createHousingRequest = async (req, res) => {
       address,
       needType,
       urgency,
-      description
+      description,
+      fileUrl,
+      fileName
     } = req.body;
 
     const request = await HousingRequest.create({
@@ -17,7 +19,9 @@ const createHousingRequest = async (req, res) => {
       address,
       needType,
       urgency,
-      description
+      description,
+      fileUrl,
+      fileName
     });
 
     res.status(201).json({
@@ -25,19 +29,18 @@ const createHousingRequest = async (req, res) => {
       request
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("HOUSING CREATE ERROR:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
 const getHousingRequests = async (req, res) => {
   try {
     const requests = await HousingRequest.find().sort({ createdAt: -1 });
-
     res.status(200).json(requests);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("HOUSING GET ERROR:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -49,8 +52,8 @@ const deleteHousingRequest = async (req, res) => {
       message: "Request deleted successfully"
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("HOUSING DELETE ERROR:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -67,8 +70,8 @@ const updateHousingRequestStatus = async (req, res) => {
       request
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("HOUSING UPDATE ERROR:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
