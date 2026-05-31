@@ -8,7 +8,9 @@ const createFoodRequest = async (req, res) => {
       foodNeed,
       householdSize,
       urgency,
-      description
+      description,
+      fileUrl,
+      fileName
     } = req.body;
 
     const request = await FoodRequest.create({
@@ -17,53 +19,42 @@ const createFoodRequest = async (req, res) => {
       foodNeed,
       householdSize,
       urgency,
-      description
+      description,
+      fileUrl,
+      fileName
     });
 
     res.status(201).json({
-      message: "Food assistance request submitted successfully",
+      message: "Food request submitted successfully",
       request
     });
-
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Server error"
-    });
+    console.error("FOOD CREATE ERROR:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
 const getFoodRequests = async (req, res) => {
   try {
     const requests = await FoodRequest.find().sort({ createdAt: -1 });
-
     res.status(200).json(requests);
-
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Server error"
-    });
+    console.error("FOOD GET ERROR:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
 const deleteFoodRequest = async (req, res) => {
   try {
     await FoodRequest.findByIdAndDelete(req.params.id);
-
-    res.status(200).json({
-      message: "Food request deleted successfully"
-    });
-
+    res.status(200).json({ message: "Request deleted successfully" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Server error"
-    });
+    console.error("FOOD DELETE ERROR:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
-const resolveFoodRequest = async (req, res) => {
+const updateFoodRequestStatus = async (req, res) => {
   try {
     const request = await FoodRequest.findByIdAndUpdate(
       req.params.id,
@@ -72,15 +63,12 @@ const resolveFoodRequest = async (req, res) => {
     );
 
     res.status(200).json({
-      message: "Food request resolved",
+      message: "Request marked as resolved",
       request
     });
-
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Server error"
-    });
+    console.error("FOOD UPDATE ERROR:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -88,5 +76,5 @@ module.exports = {
   createFoodRequest,
   getFoodRequests,
   deleteFoodRequest,
-  resolveFoodRequest
+  updateFoodRequestStatus
 };
