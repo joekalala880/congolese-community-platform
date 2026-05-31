@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
 
+const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const housingRoutes = require("./routes/housingRoutes");
 const immigrationRoutes = require("./routes/immigrationRoutes");
@@ -26,6 +27,8 @@ app.use(
 app.use(express.json());
 
 connectDB();
+
+app.use("/api/users", userRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/auth", authRoutes);
