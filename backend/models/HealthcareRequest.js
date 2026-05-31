@@ -2,42 +2,18 @@ const mongoose = require("mongoose");
 
 const healthcareRequestSchema = new mongoose.Schema(
   {
-    userEmail: {
-      type: String,
-      required: true
-    },
+    userEmail: { type: String, required: true },
+    userName: { type: String, required: true },
+    healthNeed: { type: String, required: true },
+    urgency: { type: String, required: true },
+    description: { type: String, required: true },
 
-    userName: {
-      type: String,
-      required: true
-    },
+    fileUrl: { type: String, default: "" },
+    fileName: { type: String, default: "" },
 
-    healthNeed: {
-      type: String,
-      required: true
-    },
-
-    urgency: {
-      type: String,
-      required: true
-    },
-
-    description: {
-      type: String,
-      required: true
-    },
-
-    status: {
-      type: String,
-      default: "Pending"
-    }
+    status: { type: String, default: "Pending" }
   },
-  {
-    timestamps: true
-  }
+  { timestamps: true }
 );
 
-module.exports = mongoose.model(
-  "HealthcareRequest",
-  healthcareRequestSchema
-);
+module.exports = mongoose.model("HealthcareRequest", healthcareRequestSchema);
