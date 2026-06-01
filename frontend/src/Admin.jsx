@@ -59,8 +59,12 @@ function Admin() {
     }
   };
 
-  const UploadedFile = ({ request }) => {
-    if (!request?.fileUrl) return null;
+ const UploadedFile = ({ request }) => {
+  if (!request?.fileUrl) return null;
+
+  const downloadUrl = request.fileUrl.includes("/raw/upload/")
+    ? request.fileUrl.replace("/raw/upload/", "/raw/upload/fl_attachment/")
+    : request.fileUrl;
 
     return (
       <p>
