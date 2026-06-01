@@ -60,21 +60,20 @@ function Admin() {
   };
 
   const UploadedFile = ({ request }) => {
-    if (!request?.fileUrl) return null;
+  if (!request?.fileUrl) return null;
 
-   
-    return (
-      <p>
-        <strong>Uploaded File:</strong>{" "}
-        <a
-          href={request.fileUrl}
-        download={request.fileName || "document"}
+  return (
+    <p>
+      <strong>Uploaded File:</strong>{" "}
+      <a
+        href={request.fileUrl}
+        target="_blank"
         rel="noopener noreferrer"
         style={{ color: "#2563eb", fontWeight: "bold" }}
-        >
-           Download Document
-        </a>
-      </p>
+      >
+        View Document
+      </a>
+    </p>
     );
   };
 
@@ -252,7 +251,7 @@ const buttonStyle = {
   color: "white",
   border: "none",
   borderRadius: "8px",
-  fontWeight: "bold",
+  fontWeight: "bold", 
   cursor: "pointer",
   marginRight: "10px",
   marginTop: "10px"

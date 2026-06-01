@@ -4,13 +4,21 @@ const cloudinary = require("../config/cloudinary");
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: async (req, file) => {
-    return {
-      folder: "congolese-community-uploads",
-      resource_type: "raw",
-      public_id: `${Date.now()}-${file.originalname}`,
-    };
-  },
+  params: {
+    folder: "congolese-community-uploads",
+    resource_type: "auto",
+    type: "upload",
+    access_mode: "public",
+    allowed_formats: [
+      "jpg",
+      "jpeg",
+      "png",
+      "webp",
+      "pdf",
+      "doc",
+      "docx"
+    ]
+  }
 });
 
 const upload = multer({ storage });
