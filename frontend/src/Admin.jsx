@@ -62,15 +62,12 @@ function Admin() {
   const UploadedFile = ({ request }) => {
     if (!request?.fileUrl) return null;
 
-    const downloadUrl = request.fileUrl.includes("/raw/upload/")
-      ? request.fileUrl.replace("/raw/upload/", "/raw/upload/fl_attachment/")
-      : request.fileUrl;
-
+   
     return (
       <p>
         <strong>Uploaded File:</strong>{" "}
         <a
-          href={downloadUrl}
+           href={request.fileUrl}
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "#2563eb", fontWeight: "bold" }}
