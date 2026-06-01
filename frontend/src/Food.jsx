@@ -1,16 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
-import Navbar from "./Navbar";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = "https://congolese-community-platform.onrender.com";
 
 function Food() {
-  const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState(null);
-
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-  const darkMode = localStorage.getItem("darkMode") === "true";
 
   const [formData, setFormData] = useState({
     foodNeed: "",
@@ -19,32 +16,44 @@ function Food() {
     description: ""
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const inputStyle = {
+    width: "100%",
+    padding: "14px",
+    marginBottom: "18px",
+    borderRadius: "8px",
+    border: "1px solid #94a3b8",
+    background: "#1e293b",
+    color: "white"
   };
 
-  const submitFoodRequest = async () => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.foodNeed ||
+      !formData.householdSize ||
+      !formData.urgency ||
+      !formData.description
+    ) {
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    if (isNaN(formData.householdSize)) {
+      toast.error("Household size must be a number");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      if (
-        !formData.foodNeed ||
-        !formData.householdSize ||
-        !formData.urgency ||
-        !formData.description
-      ) {
-        toast.error("Please fill all fields");
-        return;
-      }
-
-      if (isNaN(Number(formData.householdSize)) || Number(formData.householdSize) < 1) {
-        toast.error("Household size must be a valid number");
-        return;
-      }
-
-      setLoading(true);
-
       let uploadedFileUrl = "";
       let uploadedFileName = "";
 
@@ -52,23 +61,14 @@ function Food() {
         const uploadData = new FormData();
         uploadData.append("file", file);
 
-        const uploadResponse = await axios.post(
-          `${API_URL}/api/upload`,
-          uploadData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
-          }
-        );
-
+        const uploadResponse = await axios.post(`${API_URL}/api/upload`, uploadData);
         uploadedFileUrl = uploadResponse.data.fileUrl || "";
         uploadedFileName = uploadResponse.data.fileName || "";
       }
 
       await axios.post(`${API_URL}/api/food/request`, {
-        userName: user?.firstName || "Unknown",
-        userEmail: user?.email || "Unknown",
+        userEmail: user?.email || "",
+        userName: user?.firstName || user?.name || "User",
         foodNeed: formData.foodNeed,
         householdSize: formData.householdSize,
         urgency: formData.urgency,
@@ -85,7 +85,6 @@ function Food() {
         urgency: "",
         description: ""
       });
-
       setFile(null);
     } catch (error) {
       console.log("FOOD SUBMIT ERROR:", error);
@@ -96,155 +95,67 @@ function Food() {
   };
 
   return (
-    <>
-      <Navbar />
+    <div style={{ minHeight: "100vh", background: "#0f172a", color: "white", padding: "40px" }}>
+      <div style={{ maxWidth: "650px", margin: "0 auto", background: "#1e293b", padding: "35px", borderRadius: "15px" }}>
+        <h2 style={{ textAlign: "center", color: "#16a34a" }}>🍲 Food Assistance</h2>
+        <p style={{ textAlign: "center" }}>
+          Request food support, emergency food help, or nutrition assistance.
+        </p>
 
-      <div
-        style={{
-          minHeight: "100vh",
-          backgroundColor: darkMode ? "#111827" : "#f3f4f6",
-          padding: "50px 20px",
-          color: darkMode ? "white" : "black"
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "650px",
-            margin: "0 auto",
-            backgroundColor: darkMode ? "#1f2937" : "white",
-            padding: "35px",
-            borderRadius: "18px",
-            boxShadow: "0 10px 25px rgba(0,0,0,0.15)"
-          }}
-        >
-          <h1 style={{ textAlign: "center", color: "#16a34a" }}>
-            🍲 Food Assistance
-          </h1>
-
-          <p style={{ textAlign: "center", marginBottom: "30px" }}>
-            Request food support, emergency food help, or nutrition assistance.
-          </p>
-
-          <select
-            name="foodNeed"
-            value={formData.foodNeed}
-            onChange={handleChange}
-            style={inputStyle}
-          >
+        <form onSubmit={handleSubmit}>
+          <select name="foodNeed" value={formData.foodNeed} onChange={handleChange} style={inputStyle}>
             <option value="">Select Food Need</option>
             <option value="Emergency Food">Emergency Food</option>
             <option value="Food Pantry">Food Pantry</option>
             <option value="Baby Food">Baby Food</option>
-            <option value="Nutrition Support">Nutrition Support</option>
+            <option value="Nutrition Assistance">Nutrition Assistance</option>
           </select>
 
           <input
             type="number"
             name="householdSize"
+            placeholder="Household Size"
             value={formData.householdSize}
             onChange={handleChange}
-            placeholder="Household Size"
-            min="1"
             style={inputStyle}
           />
 
-          <select
-            name="urgency"
-            value={formData.urgency}
-            onChange={handleChange}
-            style={inputStyle}
-          >
+          <select name="urgency" value={formData.urgency} onChange={handleChange} style={inputStyle}>
             <option value="">Select Urgency</option>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
-            <option value="High">High</option>
             <option value="Emergency">Emergency</option>
           </select>
 
           <textarea
             name="description"
+            placeholder="Explain your food situation"
             value={formData.description}
             onChange={handleChange}
-            placeholder="Explain your food situation"
-            rows="5"
-            style={{
-              ...inputStyle,
-              resize: "vertical"
-            }}
+            style={{ ...inputStyle, height: "140px" }}
           />
 
-          <label
-            style={{
-              fontWeight: "bold",
-              display: "block",
-              marginBottom: "8px"
-            }}
-          >
-            Upload document optional
-          </label>
-
+          <label style={{ fontWeight: "bold" }}>Upload document optional</label>
           <input
             type="file"
-            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.webp"
+            accept=".pdf,.jpg,.jpeg,.png,.webp"
             onChange={(e) => setFile(e.target.files[0] || null)}
             style={inputStyle}
           />
 
-          {file && (
-            <p style={{ marginBottom: "15px", color: "#16a34a" }}>
-              Selected file: {file.name}
-            </p>
-          )}
+          {file && <p style={{ color: "#22c55e" }}>Selected file: {file.name}</p>}
 
-          <button
-            onClick={submitFoodRequest}
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "14px",
-              backgroundColor: loading ? "#9ca3af" : "#16a34a",
-              color: "white",
-              border: "none",
-              borderRadius: "10px",
-              fontWeight: "bold",
-              cursor: loading ? "not-allowed" : "pointer",
-              marginTop: "10px"
-            }}
-          >
+          <button type="submit" disabled={loading} style={{ width: "100%", padding: "15px", background: "#16a34a", color: "white", border: "none", borderRadius: "8px", fontWeight: "bold" }}>
             {loading ? "Submitting..." : "Submit Food Request"}
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/dashboard")}
-            disabled={loading}
-            style={{
-              width: "100%",
-              padding: "14px",
-              backgroundColor: darkMode ? "#374151" : "#e5e7eb",
-              color: darkMode ? "white" : "black",
-              border: "none",
-              borderRadius: "10px",
-              fontWeight: "bold",
-              cursor: loading ? "not-allowed" : "pointer",
-              marginTop: "15px"
-            }}
-          >
+          <button type="button" onClick={() => navigate("/dashboard")} style={{ width: "100%", marginTop: "15px", padding: "15px", background: "#475569", color: "white", border: "none", borderRadius: "8px", fontWeight: "bold" }}>
             Back to Dashboard
           </button>
-        </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
-
-const inputStyle = {
-  width: "100%",
-  padding: "14px",
-  marginBottom: "18px",
-  borderRadius: "10px",
-  border: "1px solid #d1d5db",
-  fontSize: "16px",
-  boxSizing: "border-box"
-};
 
 export default Food;
