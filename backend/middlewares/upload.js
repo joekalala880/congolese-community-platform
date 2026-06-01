@@ -7,7 +7,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "congolese-community-uploads",
     resource_type: "auto",
-    allowed_formats: ["jpg", "jpeg", "png", "pdf", "doc", "docx", "webp"]
+    allowed_formats: ["jpg", "jpeg", "png", "pdf", "webp"]
   }
 });
 
