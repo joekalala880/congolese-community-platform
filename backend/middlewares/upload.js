@@ -9,15 +9,7 @@ const storage = new CloudinaryStorage({
     resource_type: "auto",
     type: "upload",
     access_mode: "public",
-    allowed_formats: [
-      "jpg",
-      "jpeg",
-      "png",
-      "webp",
-      "pdf",
-      "doc",
-      "docx"
-    ]
+    allowed_formats: ["jpg", "jpeg", "png", "webp", "pdf", "doc", "docx"]
   }
 });
 
