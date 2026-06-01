@@ -67,10 +67,10 @@ function Admin() {
       <p>
         <strong>Uploaded File:</strong>{" "}
         <a
-           href={request.fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#2563eb", fontWeight: "bold" }}
+          href={request.fileUrl}
+        download={request.fileName || "document"}
+        rel="noopener noreferrer"
+        style={{ color: "#2563eb", fontWeight: "bold" }}
         >
           View Document
         </a>
