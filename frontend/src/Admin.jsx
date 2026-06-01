@@ -72,7 +72,7 @@ function Admin() {
         rel="noopener noreferrer"
         style={{ color: "#2563eb", fontWeight: "bold" }}
         >
-          View Document
+           Download Document
         </a>
       </p>
     );
