@@ -28,7 +28,7 @@ function Admin() {
       setHealthcareRequests(healthcareRes.data || []);
       setImmigrationRequests(immigrationRes.data || []);
     } catch (error) {
-      console.log(error);
+      console.log("ADMIN FETCH ERROR:", error);
       toast.error("Failed to load admin requests");
     }
   };
@@ -43,7 +43,7 @@ function Admin() {
       toast.success("Request marked as resolved");
       fetchRequests();
     } catch (error) {
-      console.log(error);
+      console.log("RESOLVE ERROR:", error);
       toast.error("Failed to update request");
     }
   };
@@ -54,23 +54,23 @@ function Admin() {
       toast.success("Request deleted");
       fetchRequests();
     } catch (error) {
-      console.log(error);
+      console.log("DELETE ERROR:", error);
       toast.error("Failed to delete request");
     }
   };
 
- const UploadedFile = ({ request }) => {
-  if (!request?.fileUrl) return null;
+  const UploadedFile = ({ request }) => {
+    if (!request?.fileUrl) return null;
 
-  const downloadUrl = request.fileUrl.includes("/raw/upload/")
-    ? request.fileUrl.replace("/raw/upload/", "/raw/upload/fl_attachment/")
-    : request.fileUrl;
+    const downloadUrl = request.fileUrl.includes("/raw/upload/")
+      ? request.fileUrl.replace("/raw/upload/", "/raw/upload/fl_attachment/")
+      : request.fileUrl;
 
     return (
       <p>
         <strong>Uploaded File:</strong>{" "}
         <a
-          href={request.fileUrl}
+          href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "#2563eb", fontWeight: "bold" }}
@@ -222,15 +222,17 @@ function RequestSection({
 
             <UploadedFile request={request} />
 
-            <button
-              onClick={() => resolveRequest(type, request._id)}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#16a34a"
-              }}
-            >
-              Mark Resolved
-            </button>
+            {request.status !== "Resolved" && (
+              <button
+                onClick={() => resolveRequest(type, request._id)}
+                style={{
+                  ...buttonStyle,
+                  backgroundColor: "#16a34a"
+                }}
+              >
+                Mark Resolved
+              </button>
+            )}
 
             <button
               onClick={() => deleteRequest(type, request._id)}
