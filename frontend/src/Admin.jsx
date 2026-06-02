@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 const API_URL = "https://congolese-community-platform.onrender.com";
 
 function Admin() {
+  const [searchTerm, setSearchTerm] = useState("");
   const [housingRequests, setHousingRequests] = useState([]);
   const [foodRequests, setFoodRequests] = useState([]);
   const [healthcareRequests, setHealthcareRequests] = useState([]);
@@ -82,6 +83,14 @@ function Admin() {
   const UploadedFile = ({ request }) => {
     if (!request?.fileUrl) return null;
 
+    const filterRequests = (requests) => {
+  return requests.filter((request) =>
+    JSON.stringify(request)
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+};
+
     return (
       <p>
         <strong>Uploaded File:</strong>{" "}
@@ -126,6 +135,18 @@ function Admin() {
           <p style={{ textAlign: "center", marginBottom: "30px" }}>
             Manage community support requests.
           </p>
+          <input
+  type="text"
+  placeholder="Search requests..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "12px",
+    borderRadius: "10px",
+    marginBottom: "20px"
+  }}
+/>
 
           <div
             style={{
@@ -173,7 +194,7 @@ function Admin() {
 
           <RequestSection
             title="Housing Requests"
-            requests={housingRequests}
+           requests={filterRequests(housingRequests)}
             type="housing"
             color="#2563eb"
             darkMode={darkMode}
@@ -193,7 +214,7 @@ function Admin() {
 
           <RequestSection
             title="Food Requests"
-            requests={foodRequests}
+           requests={filterRequests(foodRequests)}
             type="food"
             color="#16a34a"
             darkMode={darkMode}
@@ -213,7 +234,7 @@ function Admin() {
 
           <RequestSection
             title="Healthcare Requests"
-            requests={healthcareRequests}
+        requests={filterRequests(healthcareRequests)}
             type="healthcare"
             color="#dc2626"
             darkMode={darkMode}
@@ -232,7 +253,7 @@ function Admin() {
 
           <RequestSection
             title="Immigration Requests"
-            requests={immigrationRequests}
+           requests={filterRequests(immigrationRequests)} 
             type="immigration"
             color="#7c3aed"
             darkMode={darkMode}
