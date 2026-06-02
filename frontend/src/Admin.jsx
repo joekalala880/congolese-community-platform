@@ -10,19 +10,22 @@ function Admin() {
   const [foodRequests, setFoodRequests] = useState([]);
   const [healthcareRequests, setHealthcareRequests] = useState([]);
   const [immigrationRequests, setImmigrationRequests] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const darkMode = localStorage.getItem("darkMode") === "true";
 
   const fetchRequests = async () => {
     try {
-      const [housingRes, foodRes, healthcareRes, immigrationRes] =
+      const [usersRes, housingRes, foodRes, healthcareRes, immigrationRes] =
         await Promise.all([
+          axios.get(`${API_URL}/api/users`),
           axios.get(`${API_URL}/api/housing/requests`),
           axios.get(`${API_URL}/api/food/requests`),
           axios.get(`${API_URL}/api/healthcare/requests`),
           axios.get(`${API_URL}/api/immigration/requests`)
         ]);
 
+      setUsers(usersRes.data || []);
       setHousingRequests(housingRes.data || []);
       setFoodRequests(foodRes.data || []);
       setHealthcareRequests(healthcareRes.data || []);
@@ -36,6 +39,23 @@ function Admin() {
   useEffect(() => {
     fetchRequests();
   }, []);
+
+  const allRequests = [
+    ...housingRequests,
+    ...foodRequests,
+    ...healthcareRequests,
+    ...immigrationRequests
+  ];
+
+  const stats = {
+    users: users.length,
+    housing: housingRequests.length,
+    food: foodRequests.length,
+    healthcare: healthcareRequests.length,
+    immigration: immigrationRequests.length,
+    pending: allRequests.filter((r) => r.status === "Pending").length,
+    resolved: allRequests.filter((r) => r.status === "Resolved").length
+  };
 
   const resolveRequest = async (type, id) => {
     try {
@@ -60,21 +80,30 @@ function Admin() {
   };
 
   const UploadedFile = ({ request }) => {
-  if (!request?.fileUrl) return null;
+    if (!request?.fileUrl) return null;
 
-  return (
-    <p>
-      <strong>Uploaded File:</strong>{" "}
-      <a
-        href={request.fileUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: "#2563eb", fontWeight: "bold" }}
-      >
-        View Document
-      </a>
-    </p>
+    return (
+      <p>
+        <strong>Uploaded File:</strong>{" "}
+        <a
+          href={request.fileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#2563eb", fontWeight: "bold" }}
+        >
+          View Document
+        </a>
+      </p>
     );
+  };
+
+  const statCard = {
+    backgroundColor: darkMode ? "#1f2937" : "white",
+    color: darkMode ? "white" : "black",
+    padding: "20px",
+    borderRadius: "14px",
+    textAlign: "center",
+    boxShadow: "0 5px 15px rgba(0,0,0,0.12)"
   };
 
   return (
@@ -97,6 +126,50 @@ function Admin() {
           <p style={{ textAlign: "center", marginBottom: "30px" }}>
             Manage community support requests.
           </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+              gap: "18px",
+              marginBottom: "35px"
+            }}
+          >
+            <div style={statCard}>
+              <h2>{stats.users}</h2>
+              <p>Total Users</p>
+            </div>
+
+            <div style={statCard}>
+              <h2>{stats.housing}</h2>
+              <p>Housing</p>
+            </div>
+
+            <div style={statCard}>
+              <h2>{stats.food}</h2>
+              <p>Food</p>
+            </div>
+
+            <div style={statCard}>
+              <h2>{stats.healthcare}</h2>
+              <p>Healthcare</p>
+            </div>
+
+            <div style={statCard}>
+              <h2>{stats.immigration}</h2>
+              <p>Immigration</p>
+            </div>
+
+            <div style={statCard}>
+              <h2>{stats.pending}</h2>
+              <p>Pending</p>
+            </div>
+
+            <div style={statCard}>
+              <h2>{stats.resolved}</h2>
+              <p>Resolved</p>
+            </div>
+          </div>
 
           <RequestSection
             title="Housing Requests"
@@ -251,7 +324,7 @@ const buttonStyle = {
   color: "white",
   border: "none",
   borderRadius: "8px",
-  fontWeight: "bold", 
+  fontWeight: "bold",
   cursor: "pointer",
   marginRight: "10px",
   marginTop: "10px"

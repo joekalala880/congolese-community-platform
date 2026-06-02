@@ -4,12 +4,16 @@ const cloudinary = require("../config/cloudinary");
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
-    folder: "congolese-community-uploads",
-    resource_type: "auto",
-    type: "upload",
-    access_mode: "public",
-    allowed_formats: ["jpg", "jpeg", "png", "webp", "pdf", "doc", "docx"]
+  params: async (req, file) => {
+    const ext = file.originalname.split(".").pop().toLowerCase();
+
+    return {
+      folder: "congolese-community-uploads",
+      resource_type: ["pdf", "doc", "docx"].includes(ext) ? "raw" : "image",
+      type: "upload",
+      access_mode: "public",
+      allowed_formats: ["jpg", "jpeg", "png", "webp", "pdf", "doc", "docx"]
+    };
   }
 });
 
