@@ -6,12 +6,12 @@ import toast from "react-hot-toast";
 const API_URL = "https://congolese-community-platform.onrender.com";
 
 function Admin() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [housingRequests, setHousingRequests] = useState([]);
   const [foodRequests, setFoodRequests] = useState([]);
   const [healthcareRequests, setHealthcareRequests] = useState([]);
   const [immigrationRequests, setImmigrationRequests] = useState([]);
   const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const darkMode = localStorage.getItem("darkMode") === "true";
 
@@ -58,6 +58,16 @@ function Admin() {
     resolved: allRequests.filter((r) => r.status === "Resolved").length
   };
 
+  const filterRequests = (requests) => {
+    if (!searchTerm.trim()) return requests;
+
+    return requests.filter((request) =>
+      JSON.stringify(request)
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
+  };
+
   const resolveRequest = async (type, id) => {
     try {
       await axios.put(`${API_URL}/api/${type}/request/${id}`);
@@ -82,14 +92,6 @@ function Admin() {
 
   const UploadedFile = ({ request }) => {
     if (!request?.fileUrl) return null;
-
-    const filterRequests = (requests) => {
-  return requests.filter((request) =>
-    JSON.stringify(request)
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
-};
 
     return (
       <p>
@@ -135,18 +137,6 @@ function Admin() {
           <p style={{ textAlign: "center", marginBottom: "30px" }}>
             Manage community support requests.
           </p>
-          <input
-  type="text"
-  placeholder="Search requests..."
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  style={{
-    width: "100%",
-    padding: "12px",
-    borderRadius: "10px",
-    marginBottom: "20px"
-  }}
-/>
 
           <div
             style={{
@@ -156,45 +146,36 @@ function Admin() {
               marginBottom: "35px"
             }}
           >
-            <div style={statCard}>
-              <h2>{stats.users}</h2>
-              <p>Total Users</p>
-            </div>
-
-            <div style={statCard}>
-              <h2>{stats.housing}</h2>
-              <p>Housing</p>
-            </div>
-
-            <div style={statCard}>
-              <h2>{stats.food}</h2>
-              <p>Food</p>
-            </div>
-
-            <div style={statCard}>
-              <h2>{stats.healthcare}</h2>
-              <p>Healthcare</p>
-            </div>
-
-            <div style={statCard}>
-              <h2>{stats.immigration}</h2>
-              <p>Immigration</p>
-            </div>
-
-            <div style={statCard}>
-              <h2>{stats.pending}</h2>
-              <p>Pending</p>
-            </div>
-
-            <div style={statCard}>
-              <h2>{stats.resolved}</h2>
-              <p>Resolved</p>
-            </div>
+            <div style={statCard}><h2>{stats.users}</h2><p>Total Users</p></div>
+            <div style={statCard}><h2>{stats.housing}</h2><p>Housing</p></div>
+            <div style={statCard}><h2>{stats.food}</h2><p>Food</p></div>
+            <div style={statCard}><h2>{stats.healthcare}</h2><p>Healthcare</p></div>
+            <div style={statCard}><h2>{stats.immigration}</h2><p>Immigration</p></div>
+            <div style={statCard}><h2>{stats.pending}</h2><p>Pending</p></div>
+            <div style={statCard}><h2>{stats.resolved}</h2><p>Resolved</p></div>
           </div>
+
+          <input
+            type="text"
+            placeholder="Search requests by name, email, type, urgency, or status..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "14px",
+              borderRadius: "10px",
+              border: "1px solid #374151",
+              marginBottom: "30px",
+              backgroundColor: darkMode ? "#1f2937" : "white",
+              color: darkMode ? "white" : "black",
+              fontSize: "16px",
+              boxSizing: "border-box"
+            }}
+          />
 
           <RequestSection
             title="Housing Requests"
-           requests={filterRequests(housingRequests)}
+            requests={filterRequests(housingRequests)}
             type="housing"
             color="#2563eb"
             darkMode={darkMode}
@@ -214,7 +195,7 @@ function Admin() {
 
           <RequestSection
             title="Food Requests"
-           requests={filterRequests(foodRequests)}
+            requests={filterRequests(foodRequests)}
             type="food"
             color="#16a34a"
             darkMode={darkMode}
@@ -234,7 +215,7 @@ function Admin() {
 
           <RequestSection
             title="Healthcare Requests"
-        requests={filterRequests(healthcareRequests)}
+            requests={filterRequests(healthcareRequests)}
             type="healthcare"
             color="#dc2626"
             darkMode={darkMode}
@@ -253,7 +234,7 @@ function Admin() {
 
           <RequestSection
             title="Immigration Requests"
-           requests={filterRequests(immigrationRequests)} 
+            requests={filterRequests(immigrationRequests)}
             type="immigration"
             color="#7c3aed"
             darkMode={darkMode}
