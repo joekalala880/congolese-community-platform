@@ -71,6 +71,13 @@ function Navbar() {
           </button>
 
           <button
+  onClick={() => (window.location.href = "/events")}
+  className="hover:text-gray-200"
+>
+  Events
+</button>
+
+          <button
             onClick={() => (window.location.href = "/developer")}
             className="hover:text-gray-200"
           >
