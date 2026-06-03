@@ -26,6 +26,7 @@ import Developer from "./DeveloperPage";
 import Analytics from "./Analytics";
 import Resources from "./Resources";
 import Events from "./Events";
+import Donate from "./Donate";
 
 import "./index.css";
 
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
     <BrowserRouter>
       <Routes>
+        <Route path="/donate" element={<Donate />} />
         <Route path="/events" element={<Events />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/analytics" element={<Analytics />} />

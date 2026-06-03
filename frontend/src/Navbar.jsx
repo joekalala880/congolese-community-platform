@@ -76,6 +76,12 @@ function Navbar() {
 >
   Events
 </button>
+<button
+  onClick={() => (window.location.href = "/donate")}
+  className="hover:text-gray-200"
+>
+  Donate
+</button>
 
           <button
             onClick={() => (window.location.href = "/developer")}
