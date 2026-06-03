@@ -288,6 +288,12 @@ function MyRequests() {
                 >
                   Delete Request
                 </button>
+                <button
+  onClick={() => (window.location.href = "/resources")}
+  className="hover:text-gray-200"
+>
+  Resources
+</button>
               </div>
             ))
           )}
