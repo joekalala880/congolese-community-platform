@@ -3,6 +3,53 @@ import Navbar from "./Navbar";
 function Resources() {
   const darkMode = localStorage.getItem("darkMode") === "true";
 
+  const resources = [
+    {
+      title: "🏠 Housing Resources",
+      color: "#2563eb",
+      items: [
+        "Emergency shelters",
+        "Rental assistance programs",
+        "Affordable housing information",
+        "Landlord and tenant help",
+      ],
+      button: "Find Housing Help",
+    },
+    {
+      title: "🍎 Food Resources",
+      color: "#16a34a",
+      items: [
+        "Food pantries",
+        "Community meals",
+        "SNAP assistance",
+        "Emergency food support",
+      ],
+      button: "Find Food Help",
+    },
+    {
+      title: "🏥 Healthcare Resources",
+      color: "#dc2626",
+      items: [
+        "Free clinics",
+        "MaineCare information",
+        "Mental health support",
+        "Appointment help",
+      ],
+      button: "Find Healthcare Help",
+    },
+    {
+      title: "🌍 Immigration Resources",
+      color: "#7c3aed",
+      items: [
+        "Citizenship workshops",
+        "Legal assistance",
+        "Translation services",
+        "Visa and paperwork support",
+      ],
+      button: "Find Immigration Help",
+    },
+  ];
+
   return (
     <>
       <Navbar />
@@ -10,53 +57,82 @@ function Resources() {
       <div
         style={{
           minHeight: "100vh",
-          backgroundColor: darkMode ? "#0f172a" : "#f8fafc",
+          backgroundColor: darkMode ? "#111827" : "#f3f4f6",
           color: darkMode ? "white" : "black",
-          padding: "40px",
+          padding: "45px 25px",
         }}
       >
-        <h1
-          style={{
-            textAlign: "center",
-            marginBottom: "40px",
-          }}
-        >
-          Community Resources
-        </h1>
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+          <h1 style={{ textAlign: "center", color: "#2563eb" }}>
+            Community Resources
+          </h1>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "20px",
-          }}
-        >
-          <div className="card">
-            <h2>🏠 Housing Resources</h2>
-            <p>Emergency shelters</p>
-            <p>Rental assistance programs</p>
-            <p>Affordable housing information</p>
-          </div>
+          <p
+            style={{
+              textAlign: "center",
+              marginBottom: "40px",
+              fontSize: "18px",
+            }}
+          >
+            Helpful services for housing, food, healthcare, and immigration
+            support.
+          </p>
 
-          <div className="card">
-            <h2>🍎 Food Resources</h2>
-            <p>Food pantries</p>
-            <p>Community meals</p>
-            <p>SNAP assistance</p>
-          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: "25px",
+            }}
+          >
+            {resources.map((resource) => (
+              <div
+                key={resource.title}
+                style={{
+                  backgroundColor: darkMode ? "#1f2937" : "white",
+                  padding: "25px",
+                  borderRadius: "16px",
+                  boxShadow: "0 6px 18px rgba(0,0,0,0.15)",
+                  borderTop: `5px solid ${resource.color}`,
+                }}
+              >
+                <h2 style={{ color: resource.color, marginBottom: "18px" }}>
+                  {resource.title}
+                </h2>
 
-          <div className="card">
-            <h2>🏥 Healthcare Resources</h2>
-            <p>Free clinics</p>
-            <p>MaineCare information</p>
-            <p>Mental health support</p>
-          </div>
+                <ul style={{ lineHeight: "1.9", marginBottom: "25px" }}>
+                  {resource.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
 
-          <div className="card">
-            <h2>🌍 Immigration Resources</h2>
-            <p>Citizenship workshops</p>
-            <p>Legal assistance</p>
-            <p>Translation services</p>
+                <button
+                  onClick={() => {
+                    if (resource.title.includes("Housing")) {
+                      window.location.href = "/housing";
+                    } else if (resource.title.includes("Food")) {
+                      window.location.href = "/food";
+                    } else if (resource.title.includes("Healthcare")) {
+                      window.location.href = "/healthcare";
+                    } else if (resource.title.includes("Immigration")) {
+                      window.location.href = "/immigration";
+                    }
+                  }}
+                  style={{
+                    backgroundColor: resource.color,
+                    color: "white",
+                    padding: "10px 16px",
+                    border: "none",
+                    borderRadius: "10px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    width: "100%",
+                  }}
+                >
+                  {resource.button}
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>
