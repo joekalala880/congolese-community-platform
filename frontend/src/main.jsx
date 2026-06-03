@@ -24,6 +24,7 @@ import Users from "./Users";
 import MyRequests from "./MyRequests";
 import Developer from "./DeveloperPage";
 import Analytics from "./Analytics";
+import Resources from "./Resources";
 
 import "./index.css";
 
@@ -36,6 +37,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
     <BrowserRouter>
       <Routes>
+        <Route path="/resources" element={<Resources />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/developer" element={<Developer />} />
         <Route path="/" element={<App />} />
