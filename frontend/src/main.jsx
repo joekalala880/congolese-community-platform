@@ -23,6 +23,7 @@ import ForgotPassword from "./ForgotPassword";
 import Users from "./Users";
 import MyRequests from "./MyRequests";
 import Developer from "./DeveloperPage";
+import Analytics from "./Analytics";
 
 import "./index.css";
 
@@ -35,6 +36,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
     <BrowserRouter>
       <Routes>
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/developer" element={<Developer />} />
         <Route path="/" element={<App />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -47,6 +49,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/my-requests" element={<MyRequests />} />
 
+        
+
         <Route
           path="/admin"
           element={
@@ -57,6 +61,17 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             )
           }
         />
+
+        <Route
+  path="/analytics"
+  element={
+    JSON.parse(localStorage.getItem("user"))?.role === "admin" ? (
+      <Analytics />
+    ) : (
+      <Navigate to="/dashboard" />
+    )
+  }
+/>
 
         <Route
           path="/users"

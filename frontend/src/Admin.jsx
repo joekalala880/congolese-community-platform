@@ -2,26 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
 
-import { Bar, Pie } from "react-chartjs-2";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Tooltip,
-  Legend
-);
 
 const API_URL = "https://congolese-community-platform.onrender.com";
 
@@ -204,6 +185,7 @@ const totalResolved =
     </div>
   </div>
 </div>
+
 
       <div
         style={{
@@ -388,6 +370,21 @@ function RequestSection({
                 Mark Resolved
               </button>
             )}
+
+            <button
+  onClick={() => window.location.href = "/analytics"}
+  style={{
+    backgroundColor: "#2563eb",
+    color: "white",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    marginBottom: "20px"
+  }}
+>
+  📊 View Analytics
+</button>
 
             <button
               onClick={() => deleteRequest(type, request._id)}
