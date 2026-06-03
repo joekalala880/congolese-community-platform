@@ -3,7 +3,6 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
 
-
 const API_URL = "https://congolese-community-platform.onrender.com";
 
 function Admin() {
@@ -24,7 +23,7 @@ function Admin() {
           axios.get(`${API_URL}/api/housing/requests`),
           axios.get(`${API_URL}/api/food/requests`),
           axios.get(`${API_URL}/api/healthcare/requests`),
-          axios.get(`${API_URL}/api/immigration/requests`)
+          axios.get(`${API_URL}/api/immigration/requests`),
         ]);
 
       setUsers(usersRes.data || []);
@@ -46,7 +45,7 @@ function Admin() {
     ...housingRequests,
     ...foodRequests,
     ...healthcareRequests,
-    ...immigrationRequests
+    ...immigrationRequests,
   ];
 
   const stats = {
@@ -56,50 +55,14 @@ function Admin() {
     healthcare: healthcareRequests.length,
     immigration: immigrationRequests.length,
     pending: allRequests.filter((r) => r.status === "Pending").length,
-    resolved: allRequests.filter((r) => r.status === "Resolved").length
+    resolved: allRequests.filter((r) => r.status === "Resolved").length,
   };
-
-
-const totalUsers = users.length;
-
-const totalPending =
-  housingRequests.filter(r => r.status === "Pending").length +
-  foodRequests.filter(r => r.status === "Pending").length +
-  healthcareRequests.filter(r => r.status === "Pending").length +
-  immigrationRequests.filter(r => r.status === "Pending").length;
-
-const totalResolved =
-  housingRequests.filter(r => r.status === "Resolved").length +
-  foodRequests.filter(r => r.status === "Resolved").length +
-  healthcareRequests.filter(r => r.status === "Resolved").length +
-  immigrationRequests.filter(r => r.status === "Resolved").length;
-
-  const chartData = {
-  labels: ["Housing", "Food", "Healthcare", "Immigration"],
-  datasets: [
-    {
-      label: "Requests",
-      data: [
-        housingRequests.length,
-        foodRequests.length,
-        healthcareRequests.length,
-        immigrationRequests.length
-      ],
-      backgroundColor: ["#2563eb", "#16a34a", "#dc2626", "#7c3aed"]
-    }
-  ]
-};
-
-
-
 
   const filterRequests = (requests) => {
     if (!searchTerm.trim()) return requests;
 
     return requests.filter((request) =>
-      JSON.stringify(request)
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
+      JSON.stringify(request).toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
@@ -149,50 +112,19 @@ const totalResolved =
     padding: "20px",
     borderRadius: "14px",
     textAlign: "center",
-    boxShadow: "0 5px 15px rgba(0,0,0,0.12)"
+    boxShadow: "0 5px 15px rgba(0,0,0,0.12)",
   };
 
   return (
     <>
       <Navbar />
 
-   <div
-  style={{
-    backgroundColor: darkMode ? "#1f2937" : "white",
-    padding: "20px",
-    borderRadius: "14px",
-    marginBottom: "30px",
-    boxShadow: "0 5px 15px rgba(0,0,0,0.12)"
-  }}
->
-  <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-    Request Analytics
-  </h2>
-
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-      gap: "25px"
-    }}
-  >
-    <div style={{ height: "300px" }}>
-      <Bar data={chartData} options={{ maintainAspectRatio: false }} />
-    </div>
-
-    <div style={{ height: "300px" }}>
-      <Pie data={chartData} options={{ maintainAspectRatio: false }} />
-    </div>
-  </div>
-</div>
-
-
       <div
         style={{
           minHeight: "100vh",
           padding: "40px 20px",
           backgroundColor: darkMode ? "#111827" : "#f3f4f6",
-          color: darkMode ? "white" : "black"
+          color: darkMode ? "white" : "black",
         }}
       >
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
@@ -200,16 +132,33 @@ const totalResolved =
             Admin Dashboard
           </h1>
 
-          <p style={{ textAlign: "center", marginBottom: "30px" }}>
+          <p style={{ textAlign: "center", marginBottom: "20px" }}>
             Manage community support requests.
           </p>
+
+          <div style={{ textAlign: "center", marginBottom: "25px" }}>
+            <button
+              onClick={() => (window.location.href = "/analytics")}
+              style={{
+                backgroundColor: "#2563eb",
+                color: "white",
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              📊 View Analytics
+            </button>
+          </div>
 
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
               gap: "18px",
-              marginBottom: "35px"
+              marginBottom: "35px",
             }}
           >
             <div style={statCard}><h2>{stats.users}</h2><p>Total Users</p></div>
@@ -235,87 +184,17 @@ const totalResolved =
               backgroundColor: darkMode ? "#1f2937" : "white",
               color: darkMode ? "white" : "black",
               fontSize: "16px",
-              boxSizing: "border-box"
+              boxSizing: "border-box",
             }}
           />
 
-          <RequestSection
-            title="Housing Requests"
-            requests={filterRequests(housingRequests)}
-            type="housing"
-            color="#2563eb"
-            darkMode={darkMode}
-            resolveRequest={resolveRequest}
-            deleteRequest={deleteRequest}
-            UploadedFile={UploadedFile}
-            fields={[
-              ["Name", "userName"],
-              ["Email", "userEmail"],
-              ["Address", "address"],
-              ["Need Type", "needType"],
-              ["Urgency", "urgency"],
-              ["Description", "description"],
-              ["Status", "status"]
-            ]}
-          />
+          <RequestSection title="Housing Requests" requests={filterRequests(housingRequests)} type="housing" color="#2563eb" darkMode={darkMode} resolveRequest={resolveRequest} deleteRequest={deleteRequest} UploadedFile={UploadedFile} fields={[["Name", "userName"], ["Email", "userEmail"], ["Address", "address"], ["Need Type", "needType"], ["Urgency", "urgency"], ["Description", "description"], ["Status", "status"]]} />
 
-          <RequestSection
-            title="Food Requests"
-            requests={filterRequests(foodRequests)}
-            type="food"
-            color="#16a34a"
-            darkMode={darkMode}
-            resolveRequest={resolveRequest}
-            deleteRequest={deleteRequest}
-            UploadedFile={UploadedFile}
-            fields={[
-              ["Name", "userName"],
-              ["Email", "userEmail"],
-              ["Food Need", "foodNeed"],
-              ["Household Size", "householdSize"],
-              ["Urgency", "urgency"],
-              ["Description", "description"],
-              ["Status", "status"]
-            ]}
-          />
+          <RequestSection title="Food Requests" requests={filterRequests(foodRequests)} type="food" color="#16a34a" darkMode={darkMode} resolveRequest={resolveRequest} deleteRequest={deleteRequest} UploadedFile={UploadedFile} fields={[["Name", "userName"], ["Email", "userEmail"], ["Food Need", "foodNeed"], ["Household Size", "householdSize"], ["Urgency", "urgency"], ["Description", "description"], ["Status", "status"]]} />
 
-          <RequestSection
-            title="Healthcare Requests"
-            requests={filterRequests(healthcareRequests)}
-            type="healthcare"
-            color="#dc2626"
-            darkMode={darkMode}
-            resolveRequest={resolveRequest}
-            deleteRequest={deleteRequest}
-            UploadedFile={UploadedFile}
-            fields={[
-              ["Name", "userName"],
-              ["Email", "userEmail"],
-              ["Health Need", "healthNeed"],
-              ["Urgency", "urgency"],
-              ["Description", "description"],
-              ["Status", "status"]
-            ]}
-          />
+          <RequestSection title="Healthcare Requests" requests={filterRequests(healthcareRequests)} type="healthcare" color="#dc2626" darkMode={darkMode} resolveRequest={resolveRequest} deleteRequest={deleteRequest} UploadedFile={UploadedFile} fields={[["Name", "userName"], ["Email", "userEmail"], ["Health Need", "healthNeed"], ["Urgency", "urgency"], ["Description", "description"], ["Status", "status"]]} />
 
-          <RequestSection
-            title="Immigration Requests"
-            requests={filterRequests(immigrationRequests)}
-            type="immigration"
-            color="#7c3aed"
-            darkMode={darkMode}
-            resolveRequest={resolveRequest}
-            deleteRequest={deleteRequest}
-            UploadedFile={UploadedFile}
-            fields={[
-              ["Name", "userName"],
-              ["Email", "userEmail"],
-              ["Case Type", "caseType"],
-              ["Urgency", "urgency"],
-              ["Description", "description"],
-              ["Status", "status"]
-            ]}
-          />
+          <RequestSection title="Immigration Requests" requests={filterRequests(immigrationRequests)} type="immigration" color="#7c3aed" darkMode={darkMode} resolveRequest={resolveRequest} deleteRequest={deleteRequest} UploadedFile={UploadedFile} fields={[["Name", "userName"], ["Email", "userEmail"], ["Case Type", "caseType"], ["Urgency", "urgency"], ["Description", "description"], ["Status", "status"]]} />
         </div>
       </div>
     </>
@@ -331,7 +210,7 @@ function RequestSection({
   resolveRequest,
   deleteRequest,
   UploadedFile,
-  fields
+  fields,
 }) {
   return (
     <div style={{ marginBottom: "40px" }}>
@@ -348,7 +227,7 @@ function RequestSection({
               padding: "20px",
               borderRadius: "14px",
               marginBottom: "18px",
-              boxShadow: "0 5px 15px rgba(0,0,0,0.12)"
+              boxShadow: "0 5px 15px rgba(0,0,0,0.12)",
             }}
           >
             {fields.map(([label, key]) => (
@@ -362,36 +241,15 @@ function RequestSection({
             {request.status !== "Resolved" && (
               <button
                 onClick={() => resolveRequest(type, request._id)}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: "#16a34a"
-                }}
+                style={{ ...buttonStyle, backgroundColor: "#16a34a" }}
               >
                 Mark Resolved
               </button>
             )}
 
             <button
-  onClick={() => window.location.href = "/analytics"}
-  style={{
-    backgroundColor: "#2563eb",
-    color: "white",
-    padding: "10px 20px",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    marginBottom: "20px"
-  }}
->
-  📊 View Analytics
-</button>
-
-            <button
               onClick={() => deleteRequest(type, request._id)}
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#dc2626"
-              }}
+              style={{ ...buttonStyle, backgroundColor: "#dc2626" }}
             >
               Delete
             </button>
@@ -410,7 +268,7 @@ const buttonStyle = {
   fontWeight: "bold",
   cursor: "pointer",
   marginRight: "10px",
-  marginTop: "10px"
+  marginTop: "10px",
 };
 
 export default Admin;
