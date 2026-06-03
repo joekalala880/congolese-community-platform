@@ -4,12 +4,7 @@ import Navbar from "./Navbar";
 
 function MyRequests() {
   const [sortOrder, setSortOrder] = useState("newest");
-  const [housingRequests, setHousingRequests] = useState([]);
-  const [foodRequests, setFoodRequests] = useState([]);
-  const [immigrationRequests, setImmigrationRequests] = useState([]);
-  const [healthcareRequests, setHealthcareRequests] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
-
   const [search, setSearch] = useState("");
   const [serviceFilter, setServiceFilter] = useState("All");
 
@@ -22,42 +17,48 @@ function MyRequests() {
 
   const fetchRequests = async () => {
     try {
-      const housingResponse = await axios.get("https://congolese-community-platform.onrender.com/api/housing/requests");
-      const foodResponse = await axios.get("https://congolese-community-platform.onrender.com/api/food/requests");
-      const immigrationResponse = await axios.get("https://congolese-community-platform.onrender.com/api/immigration/requests");
-      const healthcareResponse = await axios.get("https://congolese-community-platform.onrender.com/api/healthcare/requests");
+      const [housingResponse, foodResponse, immigrationResponse, healthcareResponse] =
+        await Promise.all([
+          axios.get("https://congolese-community-platform.onrender.com/api/housing/requests"),
+          axios.get("https://congolese-community-platform.onrender.com/api/food/requests"),
+          axios.get("https://congolese-community-platform.onrender.com/api/immigration/requests"),
+          axios.get("https://congolese-community-platform.onrender.com/api/healthcare/requests"),
+        ]);
 
-      const myHousingRequests = housingResponse.data.filter((request) => request.userEmail === user?.email);
-      const myFoodRequests = foodResponse.data.filter((request) => request.userEmail === user?.email);
-      const myImmigrationRequests = immigrationResponse.data.filter((request) => request.userEmail === user?.email);
-      const myHealthcareRequests = healthcareResponse.data.filter((request) => request.userEmail === user?.email);
+      const myHousingRequests = housingResponse.data
+        .filter((request) => request.userEmail === user?.email)
+        .map((request) => ({ ...request, service: "Housing" }));
 
-      setHousingRequests(myHousingRequests);
-      setFoodRequests(myFoodRequests);
-      setImmigrationRequests(myImmigrationRequests);
-      setHealthcareRequests(myHealthcareRequests);
+      const myFoodRequests = foodResponse.data
+        .filter((request) => request.userEmail === user?.email)
+        .map((request) => ({ ...request, service: "Food" }));
 
-      const combinedRequests = [
-        ...myHousingRequests.map((request) => ({ ...request, service: "Housing" })),
-        ...myFoodRequests.map((request) => ({ ...request, service: "Food" })),
-        ...myImmigrationRequests.map((request) => ({ ...request, service: "Immigration" })),
-        ...myHealthcareRequests.map((request) => ({ ...request, service: "Healthcare" }))
-      ];
+      const myImmigrationRequests = immigrationResponse.data
+        .filter((request) => request.userEmail === user?.email)
+        .map((request) => ({ ...request, service: "Immigration" }));
 
-      setAllRequests(combinedRequests);
+      const myHealthcareRequests = healthcareResponse.data
+        .filter((request) => request.userEmail === user?.email)
+        .map((request) => ({ ...request, service: "Healthcare" }));
+
+      setAllRequests([
+        ...myHousingRequests,
+        ...myFoodRequests,
+        ...myImmigrationRequests,
+        ...myHealthcareRequests,
+      ]);
     } catch (error) {
-      console.log(error);
+      console.log("MY REQUESTS FETCH ERROR:", error);
     }
   };
 
- const deleteRequest = async (request) => {
-  const confirmDelete = window.confirm(
-    "Are you sure you want to delete this request?"
-  );
+  const deleteRequest = async (request) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this request?"
+    );
 
-  if (!confirmDelete) {
-    return;
-  }
+    if (!confirmDelete) return;
+
     try {
       const service = request.service.toLowerCase();
 
@@ -67,36 +68,15 @@ function MyRequests() {
 
       setAllRequests(allRequests.filter((item) => item._id !== request._id));
     } catch (error) {
-      console.log(error);
+      console.log("DELETE REQUEST ERROR:", error);
     }
-  };
-
-  const counterCard = {
-    backgroundColor: darkMode ? "#1f2937" : "white",
-    padding: "20px",
-    borderRadius: "15px",
-    textAlign: "center",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
-  };
-
-  const requestCard = {
-    backgroundColor: darkMode ? "#1f2937" : "white",
-    padding: "25px",
-    borderRadius: "15px",
-    marginBottom: "20px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
   };
 
   const filteredRequests = allRequests
     .filter((request) => {
-      const matchesSearch =
-        request.address?.toLowerCase().includes(search.toLowerCase()) ||
-        request.needType?.toLowerCase().includes(search.toLowerCase()) ||
-        request.urgency?.toLowerCase().includes(search.toLowerCase()) ||
-        request.status?.toLowerCase().includes(search.toLowerCase()) ||
-        request.foodNeed?.toLowerCase().includes(search.toLowerCase()) ||
-        request.caseType?.toLowerCase().includes(search.toLowerCase()) ||
-        request.healthNeed?.toLowerCase().includes(search.toLowerCase());
+      const searchText = JSON.stringify(request).toLowerCase();
+
+      const matchesSearch = searchText.includes(search.toLowerCase());
 
       const matchesService =
         serviceFilter === "All" || request.service === serviceFilter;
@@ -109,6 +89,34 @@ function MyRequests() {
         : new Date(a.createdAt) - new Date(b.createdAt)
     );
 
+  const counterCard = {
+    backgroundColor: darkMode ? "#1f2937" : "white",
+    padding: "20px",
+    borderRadius: "15px",
+    textAlign: "center",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+  };
+
+  const requestCard = {
+    backgroundColor: darkMode ? "#1f2937" : "white",
+    padding: "25px",
+    borderRadius: "15px",
+    marginBottom: "20px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "14px",
+    marginBottom: "20px",
+    borderRadius: "12px",
+    border: "1px solid #d1d5db",
+    fontSize: "16px",
+    backgroundColor: darkMode ? "#1f2937" : "white",
+    color: darkMode ? "white" : "black",
+    boxSizing: "border-box",
+  };
+
   return (
     <>
       <Navbar />
@@ -118,7 +126,7 @@ function MyRequests() {
           minHeight: "100vh",
           backgroundColor: darkMode ? "#111827" : "#f3f4f6",
           padding: "40px 20px",
-          color: darkMode ? "white" : "black"
+          color: darkMode ? "white" : "black",
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
@@ -126,7 +134,14 @@ function MyRequests() {
             My Requests
           </h1>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "20px", marginBottom: "35px" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gap: "20px",
+              marginBottom: "35px",
+            }}
+          >
             <div style={counterCard}>
               <h3>Total Requests</h3>
               <h1>{allRequests.length}</h1>
@@ -134,12 +149,16 @@ function MyRequests() {
 
             <div style={counterCard}>
               <h3>Pending</h3>
-              <h1>{allRequests.filter((request) => request.status !== "Resolved").length}</h1>
+              <h1>
+                {allRequests.filter((request) => request.status !== "Resolved").length}
+              </h1>
             </div>
 
             <div style={counterCard}>
               <h3>Resolved</h3>
-              <h1>{allRequests.filter((request) => request.status === "Resolved").length}</h1>
+              <h1>
+                {allRequests.filter((request) => request.status === "Resolved").length}
+              </h1>
             </div>
           </div>
 
@@ -148,31 +167,13 @@ function MyRequests() {
             placeholder="Search requests..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "14px",
-              marginBottom: "20px",
-              borderRadius: "12px",
-              border: "1px solid #d1d5db",
-              fontSize: "16px",
-              boxSizing: "border-box"
-            }}
+            style={inputStyle}
           />
 
           <select
             value={serviceFilter}
             onChange={(e) => setServiceFilter(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "14px",
-              marginBottom: "20px",
-              borderRadius: "12px",
-              border: "1px solid #d1d5db",
-              fontSize: "16px",
-              backgroundColor: darkMode ? "#1f2937" : "white",
-              color: darkMode ? "white" : "black",
-              boxSizing: "border-box"
-            }}
+            style={inputStyle}
           >
             <option value="All">All Services</option>
             <option value="Housing">Housing</option>
@@ -184,16 +185,7 @@ function MyRequests() {
           <select
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "14px",
-              marginBottom: "30px",
-              borderRadius: "12px",
-              border: "1px solid #d1d5db",
-              fontSize: "16px",
-              backgroundColor: darkMode ? "#1f2937" : "white",
-              color: darkMode ? "white" : "black"
-            }}
+            style={inputStyle}
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
@@ -208,12 +200,22 @@ function MyRequests() {
                   {request.needType ||
                     request.foodNeed ||
                     request.caseType ||
-                    request.healthNeed}
+                    request.healthNeed ||
+                    "Request"}
                 </h2>
 
                 <p>
                   <strong>Service:</strong>{" "}
-                  <span style={{ backgroundColor: "#2563eb", color: "white", padding: "5px 10px", borderRadius: "15px", fontWeight: "bold", fontSize: "14px" }}>
+                  <span
+                    style={{
+                      backgroundColor: "#2563eb",
+                      color: "white",
+                      padding: "5px 10px",
+                      borderRadius: "15px",
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                    }}
+                  >
                     {request.service === "Housing" && "🏠 Housing"}
                     {request.service === "Food" && "🍲 Food"}
                     {request.service === "Immigration" && "🌍 Immigration"}
@@ -227,12 +229,19 @@ function MyRequests() {
                   </p>
                 )}
 
+                {request.householdSize && (
+                  <p>
+                    <strong>Household Size:</strong> {request.householdSize}
+                  </p>
+                )}
+
                 <p>
                   <strong>Urgency:</strong>{" "}
                   <span
                     style={{
                       backgroundColor:
-                        request.urgency === "High" || request.urgency === "Emergency"
+                        request.urgency === "High" ||
+                        request.urgency === "Emergency"
                           ? "#dc2626"
                           : request.urgency === "Medium"
                           ? "#f59e0b"
@@ -241,35 +250,55 @@ function MyRequests() {
                       padding: "5px 10px",
                       borderRadius: "15px",
                       fontWeight: "bold",
-                      fontSize: "14px"
+                      fontSize: "14px",
                     }}
                   >
-                    {request.urgency}
+                    {request.urgency || "N/A"}
                   </span>
                 </p>
 
                 <p>
-                  <strong>Description:</strong> {request.description}
+                  <strong>Description:</strong> {request.description || "N/A"}
                 </p>
+
+                {request.fileUrl && (
+                  <p>
+                    <strong>Uploaded File:</strong>{" "}
+                    <a
+                      href={request.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: "#2563eb",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      View Document
+                    </a>
+                  </p>
+                )}
 
                 <p>
                   <strong>Submitted:</strong>{" "}
-                  {new Date(request.createdAt).toLocaleString()}
+                  {request.createdAt
+                    ? new Date(request.createdAt).toLocaleString()
+                    : "N/A"}
                 </p>
 
                 <p>
                   <strong>Status:</strong>{" "}
                   <span
                     style={{
-                      backgroundColor: request.status === "Resolved" ? "#16a34a" : "#f59e0b",
+                      backgroundColor:
+                        request.status === "Resolved" ? "#16a34a" : "#f59e0b",
                       color: "white",
                       padding: "6px 12px",
                       borderRadius: "20px",
                       fontWeight: "bold",
-                      fontSize: "14px"
+                      fontSize: "14px",
                     }}
                   >
-                    {request.status}
+                    {request.status || "Pending"}
                   </span>
                 </p>
 
@@ -283,17 +312,11 @@ function MyRequests() {
                     padding: "10px 16px",
                     borderRadius: "10px",
                     cursor: "pointer",
-                    fontWeight: "bold"
+                    fontWeight: "bold",
                   }}
                 >
                   Delete Request
                 </button>
-                <button
-  onClick={() => (window.location.href = "/resources")}
-  className="hover:text-gray-200"
->
-  Resources
-</button>
               </div>
             ))
           )}
