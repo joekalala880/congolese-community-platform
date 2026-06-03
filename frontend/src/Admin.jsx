@@ -175,7 +175,7 @@ const totalResolved =
     <>
       <Navbar />
 
-      <div
+   <div
   style={{
     backgroundColor: darkMode ? "#1f2937" : "white",
     padding: "20px",
@@ -195,8 +195,13 @@ const totalResolved =
       gap: "25px"
     }}
   >
-    <Bar data={chartData} />
-    <Pie data={chartData} />
+    <div style={{ height: "300px" }}>
+      <Bar data={chartData} options={{ maintainAspectRatio: false }} />
+    </div>
+
+    <div style={{ height: "300px" }}>
+      <Pie data={chartData} options={{ maintainAspectRatio: false }} />
+    </div>
   </div>
 </div>
 
