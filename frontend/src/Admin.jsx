@@ -2,6 +2,26 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import toast from "react-hot-toast";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+import { Bar, Pie } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend
+);
 
 const API_URL = "https://congolese-community-platform.onrender.com";
 
@@ -57,6 +77,40 @@ function Admin() {
     pending: allRequests.filter((r) => r.status === "Pending").length,
     resolved: allRequests.filter((r) => r.status === "Resolved").length
   };
+
+
+const totalUsers = users.length;
+
+const totalPending =
+  housingRequests.filter(r => r.status === "Pending").length +
+  foodRequests.filter(r => r.status === "Pending").length +
+  healthcareRequests.filter(r => r.status === "Pending").length +
+  immigrationRequests.filter(r => r.status === "Pending").length;
+
+const totalResolved =
+  housingRequests.filter(r => r.status === "Resolved").length +
+  foodRequests.filter(r => r.status === "Resolved").length +
+  healthcareRequests.filter(r => r.status === "Resolved").length +
+  immigrationRequests.filter(r => r.status === "Resolved").length;
+
+  const chartData = {
+  labels: ["Housing", "Food", "Healthcare", "Immigration"],
+  datasets: [
+    {
+      label: "Requests",
+      data: [
+        housingRequests.length,
+        foodRequests.length,
+        healthcareRequests.length,
+        immigrationRequests.length
+      ],
+      backgroundColor: ["#2563eb", "#16a34a", "#dc2626", "#7c3aed"]
+    }
+  ]
+};
+
+
+
 
   const filterRequests = (requests) => {
     if (!searchTerm.trim()) return requests;
@@ -120,6 +174,31 @@ function Admin() {
   return (
     <>
       <Navbar />
+
+      <div
+  style={{
+    backgroundColor: darkMode ? "#1f2937" : "white",
+    padding: "20px",
+    borderRadius: "14px",
+    marginBottom: "30px",
+    boxShadow: "0 5px 15px rgba(0,0,0,0.12)"
+  }}
+>
+  <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+    Request Analytics
+  </h2>
+
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+      gap: "25px"
+    }}
+  >
+    <Bar data={chartData} />
+    <Pie data={chartData} />
+  </div>
+</div>
 
       <div
         style={{
