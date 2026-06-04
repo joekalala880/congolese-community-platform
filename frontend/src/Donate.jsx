@@ -24,6 +24,16 @@ function Donate() {
     },
   ];
 
+  const handleDonate = (option) => {
+    if (option.title.includes("PayPal")) {
+      window.open("https://www.paypal.me/joekalala", "_blank");
+    } else if (option.title.includes("CashApp")) {
+      window.open("https://cash.app/$kalalajoe", "_blank");
+    } else {
+      alert("Stripe integration coming soon.");
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -41,10 +51,43 @@ function Donate() {
             Support the Community
           </h1>
 
-          <p style={{ textAlign: "center", marginBottom: "40px" }}>
+          <p
+            style={{
+              textAlign: "center",
+              marginBottom: "30px",
+              fontSize: "18px",
+            }}
+          >
             Help support food drives, housing assistance, healthcare access,
             immigration help, and community events.
           </p>
+
+          <h2 style={{ textAlign: "center", marginBottom: "15px" }}>
+            Community Fund Goal
+          </h2>
+
+          <div
+            style={{
+              width: "100%",
+              background: "#374151",
+              borderRadius: "10px",
+              overflow: "hidden",
+              marginBottom: "40px",
+            }}
+          >
+            <div
+              style={{
+                width: "35%",
+                background: "#22c55e",
+                padding: "10px",
+                textAlign: "center",
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
+              $3,500 Raised of $10,000
+            </div>
+          </div>
 
           <div
             style={{
@@ -65,12 +108,11 @@ function Donate() {
                 }}
               >
                 <h2 style={{ color: option.color }}>{option.title}</h2>
+
                 <p>{option.description}</p>
 
                 <button
-                  onClick={() =>
-                    alert("Donation payment setup coming soon.")
-                  }
+                  onClick={() => handleDonate(option)}
                   style={{
                     backgroundColor: option.color,
                     color: "white",
