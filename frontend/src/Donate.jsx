@@ -10,7 +10,7 @@ function Donate() {
         "Support the Congolese Community using a secure credit or debit card payment.",
       button: "Donate with Stripe",
       color: "#2563eb",
-      link: "https://buy.stripe.com/test_6oUeVd2Ugfgs5iN2ry9R600",
+      link: "https://buy.stripe.com/test_7sY00jbqM2tG12xd6c9R601",
     },
     {
       title: "🅿️ PayPal",
