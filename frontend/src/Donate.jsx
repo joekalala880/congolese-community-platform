@@ -23,16 +23,15 @@ function Donate() {
       color: "#16a34a",
     },
   ];
-
-  const handleDonate = (option) => {
-    if (option.title.includes("PayPal")) {
-      window.open("https://www.paypal.me/joekalala", "_blank");
-    } else if (option.title.includes("CashApp")) {
-      window.open("https://cash.app/$kalalajoe", "_blank");
-    } else {
-      alert("Stripe integration coming soon.");
-    }
-  };
+const handleDonate = (option) => {
+  if (option.title.toLowerCase().includes("paypal")) {
+    window.open("https://www.paypal.me/joekalala", "_blank");
+  } else if (option.title.toLowerCase().includes("cashapp")) {
+    window.open("https://cash.app/$kalalajoe", "_blank");
+  } else {
+    alert("Stripe integration coming soon.");
+  }
+};
 
   return (
     <>
