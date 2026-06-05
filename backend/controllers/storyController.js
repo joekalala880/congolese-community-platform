@@ -1,29 +1,29 @@
 const Story = require("../models/Story");
 
-exports.getStories = async (req, res) => {
+exports.deleteStory = async (req, res) => {
   try {
-    const stories = await Story.find().sort({ createdAt: -1 });
-    res.json(stories);
+    await Story.findByIdAndDelete(req.params.id);
+    res.json({ message: "Story deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch stories" });
+    res.status(500).json({ message: "Failed to delete story" });
   }
 };
 
-exports.createStory = async (req, res) => {
+exports.likeStory = async (req, res) => {
   try {
-    const { name, story, userEmail } = req.body;
+    const updatedStory = await Story.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
 
-    const newStory = new Story({
-      name,
-      story,
-      userEmail,
-    });
+    if (!updatedStory) {
+      return res.status(404).json({ message: "Story not found" });
+    }
 
-    await newStory.save();
-
-    res.status(201).json(newStory);
+    res.json(updatedStory);
   } catch (error) {
-    res.status(500).json({ message: "Failed to create story" });
+    res.status(500).json({ message: "Failed to like story" });
   }
 };
 

@@ -6,11 +6,13 @@ const {
   createStory,
   deleteStory,
   updateStory,
+  likeStory,
 } = require("../controllers/storyController");
 
 router.get("/", getStories);
 router.post("/", createStory);
-router.delete("/:id", deleteStory);
 router.put("/:id", updateStory);
+router.put("/:id/like", likeStory);
+router.delete("/:id", deleteStory);
 
 module.exports = router;
