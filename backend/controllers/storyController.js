@@ -47,6 +47,37 @@ exports.updateStory = async (req, res) => {
   }
 };
 
+exports.commentStory = async (req, res) => {
+  try {
+    const { name, text } = req.body;
+
+    if (!text || !text.trim()) {
+      return res.status(400).json({ message: "Comment cannot be empty" });
+    }
+
+    const updatedStory = await Story.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: {
+          comments: {
+            name: name || "Anonymous User",
+            text,
+          },
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedStory) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+
+    res.json(updatedStory);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to add comment" });
+  }
+};
+
 exports.likeStory = async (req, res) => {
   try {
     const updatedStory = await Story.findByIdAndUpdate(
