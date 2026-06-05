@@ -299,38 +299,42 @@ function Stories() {
                       ❤️ Like {story.likes || 0}
                     </button>
 
-                    <button
-                      onClick={() => startEdit(story)}
-                      style={{
-                        marginTop: "12px",
-                        backgroundColor: "#f59e0b",
-                        color: "white",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Edit
-                    </button>
+                    {story.userEmail === user?.email && (
+                      <>
+                        <button
+                          onClick={() => startEdit(story)}
+                          style={{
+                            marginTop: "12px",
+                            backgroundColor: "#f59e0b",
+                            color: "white",
+                            border: "none",
+                            padding: "8px 14px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                            marginRight: "10px",
+                          }}
+                        >
+                          Edit
+                        </button>
 
-                    <button
-                      onClick={() => handleDelete(story._id)}
-                      style={{
-                        marginTop: "12px",
-                        backgroundColor: "#dc2626",
-                        color: "white",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Delete
-                    </button>
+                        <button
+                          onClick={() => handleDelete(story._id)}
+                          style={{
+                            marginTop: "12px",
+                            backgroundColor: "#dc2626",
+                            color: "white",
+                            border: "none",
+                            padding: "8px 14px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
 
                     <div style={{ marginTop: "15px" }}>
                       <input
