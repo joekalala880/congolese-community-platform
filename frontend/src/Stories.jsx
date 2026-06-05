@@ -11,7 +11,6 @@ function Stories() {
   const [stories, setStories] = useState([]);
   const [newStory, setNewStory] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
@@ -99,6 +98,21 @@ function Stories() {
     } catch (error) {
       console.error("DELETE STORY ERROR:", error);
       alert("Failed to delete story");
+    }
+  };
+
+  const handleLike = async (id) => {
+    try {
+      const response = await axios.put(`${API_URL}/api/stories/${id}/like`);
+
+      setStories((prevStories) =>
+        prevStories.map((story) =>
+          story._id === id ? response.data : story
+        )
+      );
+    } catch (error) {
+      console.error("LIKE STORY ERROR:", error);
+      alert("Failed to like story");
     }
   };
 
@@ -238,6 +252,23 @@ function Stories() {
                     </small>
 
                     <br />
+
+                    <button
+                      onClick={() => handleLike(story._id)}
+                      style={{
+                        marginTop: "12px",
+                        backgroundColor: "#e11d48",
+                        color: "white",
+                        border: "none",
+                        padding: "8px 14px",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        marginRight: "10px",
+                      }}
+                    >
+                      ❤️ Like {story.likes || 0}
+                    </button>
 
                     <button
                       onClick={() => startEdit(story)}
