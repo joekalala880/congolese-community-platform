@@ -27,6 +27,26 @@ exports.createStory = async (req, res) => {
   }
 };
 
+exports.updateStory = async (req, res) => {
+  try {
+    const { story } = req.body;
+
+    const updatedStory = await Story.findByIdAndUpdate(
+      req.params.id,
+      { story },
+      { new: true }
+    );
+
+    if (!updatedStory) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+
+    res.json(updatedStory);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update story" });
+  }
+};
+
 exports.deleteStory = async (req, res) => {
   try {
     await Story.findByIdAndDelete(req.params.id);
