@@ -1,4 +1,4 @@
-require("dotenv").config({ path: __dirname + "/.env" });
+require("dotenv").config();
 const mongoose = require("mongoose");
 
 const express = require("express");
@@ -13,6 +13,7 @@ const foodRoutes = require("./routes/foodRoutes");
 const healthcareRoutes = require("./routes/healthcareRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
+const storyRoutes = require("./routes/storyRoutes");
 
 const app = express();
 
@@ -30,7 +31,7 @@ app.use(
 app.use(express.json());
 
 connectDB();
-
+app.use("/api/stories", storyRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/analytics", analyticsRoutes);
