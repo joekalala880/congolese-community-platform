@@ -1,29 +1,29 @@
 const Story = require("../models/Story");
 
-exports.deleteStory = async (req, res) => {
+exports.getStories = async (req, res) => {
   try {
-    await Story.findByIdAndDelete(req.params.id);
-    res.json({ message: "Story deleted successfully" });
+    const stories = await Story.find().sort({ createdAt: -1 });
+    res.json(stories);
   } catch (error) {
-    res.status(500).json({ message: "Failed to delete story" });
+    res.status(500).json({ message: "Failed to fetch stories" });
   }
 };
 
-exports.likeStory = async (req, res) => {
+exports.createStory = async (req, res) => {
   try {
-    const updatedStory = await Story.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { likes: 1 } },
-      { new: true }
-    );
+    const { name, story, userEmail } = req.body;
 
-    if (!updatedStory) {
-      return res.status(404).json({ message: "Story not found" });
-    }
+    const newStory = new Story({
+      name,
+      story,
+      userEmail,
+      likes: 0,
+    });
 
-    res.json(updatedStory);
+    await newStory.save();
+    res.status(201).json(newStory);
   } catch (error) {
-    res.status(500).json({ message: "Failed to like story" });
+    res.status(500).json({ message: "Failed to create story" });
   }
 };
 
@@ -47,9 +47,33 @@ exports.updateStory = async (req, res) => {
   }
 };
 
+exports.likeStory = async (req, res) => {
+  try {
+    const updatedStory = await Story.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
+
+    if (!updatedStory) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+
+    res.json(updatedStory);
+  } catch (error) {
+    console.error("LIKE STORY ERROR:", error);
+    res.status(500).json({ message: "Failed to like story" });
+  }
+};
+
 exports.deleteStory = async (req, res) => {
   try {
-    await Story.findByIdAndDelete(req.params.id);
+    const deletedStory = await Story.findByIdAndDelete(req.params.id);
+
+    if (!deletedStory) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+
     res.json({ message: "Story deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to delete story" });
