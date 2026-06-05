@@ -11,8 +11,10 @@ function Stories() {
   const [stories, setStories] = useState([]);
   const [newStory, setNewStory] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
+  const [commentText, setCommentText] = useState({});
 
   useEffect(() => {
     fetchStories();
@@ -113,6 +115,33 @@ function Stories() {
     } catch (error) {
       console.error("LIKE STORY ERROR:", error);
       alert("Failed to like story");
+    }
+  };
+
+  const handleComment = async (id) => {
+    const text = commentText[id];
+
+    if (!text || !text.trim()) {
+      alert("Please write a comment first");
+      return;
+    }
+
+    try {
+      const response = await axios.put(`${API_URL}/api/stories/${id}/comment`, {
+        name: user?.firstName || "Anonymous User",
+        text,
+      });
+
+      setStories((prevStories) =>
+        prevStories.map((story) =>
+          story._id === id ? response.data : story
+        )
+      );
+
+      setCommentText((prev) => ({ ...prev, [id]: "" }));
+    } catch (error) {
+      console.error("COMMENT STORY ERROR:", error);
+      alert("Failed to add comment");
     }
   };
 
@@ -302,6 +331,59 @@ function Stories() {
                     >
                       Delete
                     </button>
+
+                    <div style={{ marginTop: "15px" }}>
+                      <input
+                        type="text"
+                        placeholder="Write a comment..."
+                        value={commentText[story._id] || ""}
+                        onChange={(e) =>
+                          setCommentText({
+                            ...commentText,
+                            [story._id]: e.target.value,
+                          })
+                        }
+                        style={{
+                          padding: "8px",
+                          borderRadius: "8px",
+                          border: "1px solid #ccc",
+                          marginRight: "8px",
+                          width: "60%",
+                        }}
+                      />
+
+                      <button
+                        onClick={() => handleComment(story._id)}
+                        style={{
+                          backgroundColor: "#2563eb",
+                          color: "white",
+                          border: "none",
+                          padding: "8px 14px",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Comment
+                      </button>
+                    </div>
+
+                    <div style={{ marginTop: "12px" }}>
+                      {story.comments?.map((comment, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            backgroundColor: darkMode ? "#374151" : "#e5e7eb",
+                            padding: "8px",
+                            borderRadius: "8px",
+                            marginTop: "6px",
+                          }}
+                        >
+                          <strong>{comment.name}: </strong>
+                          {comment.text}
+                        </div>
+                      ))}
+                    </div>
                   </>
                 )}
               </div>
