@@ -12,10 +12,6 @@ function Stories() {
   const [newStory, setNewStory] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [editingId, setEditingId] = useState(null);
-  const [editText, setEditText] = useState("");
-  const [commentText, setCommentText] = useState({});
-
   useEffect(() => {
     fetchStories();
   }, []);
@@ -54,94 +50,15 @@ function Stories() {
     }
   };
 
-  const startEdit = (story) => {
-    setEditingId(story._id);
-    setEditText(story.story);
-  };
-
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditText("");
-  };
-
-  const saveEdit = async (id) => {
-    if (!editText.trim()) {
-      alert("Story cannot be empty");
-      return;
-    }
-
-    try {
-      const response = await axios.put(`${API_URL}/api/stories/${id}`, {
-        story: editText,
-      });
-
-      setStories((prevStories) =>
-        prevStories.map((story) =>
-          story._id === id ? response.data : story
-        )
-      );
-
-      cancelEdit();
-    } catch (error) {
-      console.error("EDIT STORY ERROR:", error);
-      alert("Failed to update story");
-    }
-  };
-
-  const handleDelete = async (id) => {
+  const deleteStory = async (id) => {
     if (!window.confirm("Delete this story?")) return;
 
     try {
       await axios.delete(`${API_URL}/api/stories/${id}`);
-
-      setStories((prevStories) =>
-        prevStories.filter((story) => story._id !== id)
-      );
+      setStories(stories.filter((item) => item._id !== id));
     } catch (error) {
       console.error("DELETE STORY ERROR:", error);
       alert("Failed to delete story");
-    }
-  };
-
-  const handleLike = async (id) => {
-    try {
-      const response = await axios.put(`${API_URL}/api/stories/${id}/like`);
-
-      setStories((prevStories) =>
-        prevStories.map((story) =>
-          story._id === id ? response.data : story
-        )
-      );
-    } catch (error) {
-      console.error("LIKE STORY ERROR:", error);
-      alert("Failed to like story");
-    }
-  };
-
-  const handleComment = async (id) => {
-    const text = commentText[id];
-
-    if (!text || !text.trim()) {
-      alert("Please write a comment first");
-      return;
-    }
-
-    try {
-      const response = await axios.put(`${API_URL}/api/stories/${id}/comment`, {
-        name: user?.firstName || "Anonymous User",
-        text,
-      });
-
-      setStories((prevStories) =>
-        prevStories.map((story) =>
-          story._id === id ? response.data : story
-        )
-      );
-
-      setCommentText((prev) => ({ ...prev, [id]: "" }));
-    } catch (error) {
-      console.error("COMMENT STORY ERROR:", error);
-      alert("Failed to add comment");
     }
   };
 
@@ -163,16 +80,16 @@ function Stories() {
           </h1>
 
           <p style={{ textAlign: "center", marginBottom: "30px" }}>
-            Share your experience with the Congolese Community Platform.
+            Share how the Congolese Community Platform helped you.
           </p>
 
           <div
             style={{
               backgroundColor: darkMode ? "#1f2937" : "white",
-              padding: "20px",
-              borderRadius: "12px",
+              padding: "25px",
+              borderRadius: "15px",
               marginBottom: "30px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             }}
           >
             <textarea
@@ -182,8 +99,8 @@ function Stories() {
               style={{
                 width: "100%",
                 minHeight: "120px",
-                padding: "12px",
-                borderRadius: "8px",
+                padding: "15px",
+                borderRadius: "10px",
                 border: "1px solid #ccc",
                 marginBottom: "15px",
                 boxSizing: "border-box",
@@ -197,8 +114,8 @@ function Stories() {
                 backgroundColor: loading ? "#9ca3af" : "#2563eb",
                 color: "white",
                 border: "none",
-                padding: "10px 20px",
-                borderRadius: "8px",
+                padding: "12px 20px",
+                borderRadius: "10px",
                 cursor: loading ? "not-allowed" : "pointer",
                 fontWeight: "bold",
               }}
@@ -210,55 +127,33 @@ function Stories() {
           {stories.length === 0 ? (
             <h2 style={{ textAlign: "center" }}>No stories yet</h2>
           ) : (
-            stories.map((story) => (
+            stories.map((item) => (
               <div
-                key={story._id}
+                key={item._id}
                 style={{
                   backgroundColor: darkMode ? "#1f2937" : "white",
                   padding: "20px",
-                  borderRadius: "12px",
+                  borderRadius: "15px",
                   marginBottom: "20px",
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                 }}
               >
-                <h3>{story.name}</h3>
+                <h3>{item.name}</h3>
 
-                {editingId === story._id ? (
-                  <>
-                    <textarea
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                      style={{
-                        width: "100%",
-                        minHeight: "100px",
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "1px solid #ccc",
-                        marginBottom: "10px",
-                        boxSizing: "border-box",
-                      }}
-                    />
+                <p>{item.story}</p>
 
+                <small>
+                  {item.createdAt
+                    ? new Date(item.createdAt).toLocaleString()
+                    : ""}
+                </small>
+
+                {item.userEmail === user?.email && (
+                  <div style={{ marginTop: "15px" }}>
                     <button
-                      onClick={() => saveEdit(story._id)}
+                      onClick={() => deleteStory(item._id)}
                       style={{
-                        backgroundColor: "#16a34a",
-                        color: "white",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Save
-                    </button>
-
-                    <button
-                      onClick={cancelEdit}
-                      style={{
-                        backgroundColor: "#6b7280",
+                        backgroundColor: "#dc2626",
                         color: "white",
                         border: "none",
                         padding: "8px 14px",
@@ -267,128 +162,9 @@ function Stories() {
                         fontWeight: "bold",
                       }}
                     >
-                      Cancel
+                      Delete
                     </button>
-                  </>
-                ) : (
-                  <>
-                    <p>{story.story}</p>
-
-                    <small>
-                      {story.createdAt
-                        ? new Date(story.createdAt).toLocaleString()
-                        : ""}
-                    </small>
-
-                    <br />
-
-                    <button
-                      onClick={() => handleLike(story._id)}
-                      style={{
-                        marginTop: "12px",
-                        backgroundColor: "#e11d48",
-                        color: "white",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        marginRight: "10px",
-                      }}
-                    >
-                      ❤️ Like {story.likes || 0}
-                    </button>
-
-                    {story.userEmail === user?.email && (
-                      <>
-                        <button
-                          onClick={() => startEdit(story)}
-                          style={{
-                            marginTop: "12px",
-                            backgroundColor: "#f59e0b",
-                            color: "white",
-                            border: "none",
-                            padding: "8px 14px",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            fontWeight: "bold",
-                            marginRight: "10px",
-                          }}
-                        >
-                          Edit
-                        </button>
-
-                        <button
-                          onClick={() => handleDelete(story._id)}
-                          style={{
-                            marginTop: "12px",
-                            backgroundColor: "#dc2626",
-                            color: "white",
-                            border: "none",
-                            padding: "8px 14px",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
-
-                    <div style={{ marginTop: "15px" }}>
-                      <input
-                        type="text"
-                        placeholder="Write a comment..."
-                        value={commentText[story._id] || ""}
-                        onChange={(e) =>
-                          setCommentText({
-                            ...commentText,
-                            [story._id]: e.target.value,
-                          })
-                        }
-                        style={{
-                          padding: "8px",
-                          borderRadius: "8px",
-                          border: "1px solid #ccc",
-                          marginRight: "8px",
-                          width: "60%",
-                        }}
-                      />
-
-                      <button
-                        onClick={() => handleComment(story._id)}
-                        style={{
-                          backgroundColor: "#2563eb",
-                          color: "white",
-                          border: "none",
-                          padding: "8px 14px",
-                          borderRadius: "8px",
-                          cursor: "pointer",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        Comment
-                      </button>
-                    </div>
-
-                    <div style={{ marginTop: "12px" }}>
-                      {story.comments?.map((comment, index) => (
-                        <div
-                          key={index}
-                          style={{
-                            backgroundColor: darkMode ? "#374151" : "#e5e7eb",
-                            padding: "8px",
-                            borderRadius: "8px",
-                            marginTop: "6px",
-                          }}
-                        >
-                          <strong>{comment.name}: </strong>
-                          {comment.text}
-                        </div>
-                      ))}
-                    </div>
-                  </>
+                  </div>
                 )}
               </div>
             ))
