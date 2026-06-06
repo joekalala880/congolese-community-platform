@@ -89,6 +89,27 @@ function Navbar() {
   Stories
 </button>
 
+<button onClick={() => handleDelete(story._id)}>
+  Delete
+</button>
+
+<button
+  onClick={() => handleLike(story._id)}
+  style={{
+    marginTop: "12px",
+    backgroundColor: "#e11d48",
+    color: "white",
+    border: "none",
+    padding: "8px 14px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    marginRight: "10px",
+  }}
+>
+  ❤️ Like {story.likes || 0}
+</button>
+
           <button
             onClick={() => (window.location.href = "/developer")}
             className="hover:text-gray-200"
