@@ -11,55 +11,59 @@ function Stories() {
   const [stories, setStories] = useState([]);
   const [newStory, setNewStory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
 
   useEffect(() => {
     fetchStories();
   }, []);
 
   const fetchStories = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/api/stories`);
-      setStories(response.data || []);
-    } catch (error) {
-      console.error("FETCH STORIES ERROR:", error);
-    }
+    const response = await axios.get(`${API_URL}/api/stories`);
+    setStories(response.data || []);
   };
 
   const addStory = async () => {
-    if (!newStory.trim()) {
-      alert("Please write your story first");
-      return;
-    }
+    if (!newStory.trim()) return alert("Please write your story first");
 
-    try {
-      setLoading(true);
+    setLoading(true);
+    await axios.post(`${API_URL}/api/stories`, {
+      name: user?.firstName || "Anonymous User",
+      userEmail: user?.email || "",
+      story: newStory,
+    });
 
-      await axios.post(`${API_URL}/api/stories`, {
-        name: user?.firstName || "Anonymous User",
-        userEmail: user?.email || "",
-        story: newStory,
-      });
-
-      setNewStory("");
-      fetchStories();
-    } catch (error) {
-      console.error("ADD STORY ERROR:", error);
-      alert("Failed to post story");
-    } finally {
-      setLoading(false);
-    }
+    setNewStory("");
+    setLoading(false);
+    fetchStories();
   };
 
   const deleteStory = async (id) => {
     if (!window.confirm("Delete this story?")) return;
+    await axios.delete(`${API_URL}/api/stories/${id}`);
+    fetchStories();
+  };
 
-    try {
-      await axios.delete(`${API_URL}/api/stories/${id}`);
-      setStories(stories.filter((item) => item._id !== id));
-    } catch (error) {
-      console.error("DELETE STORY ERROR:", error);
-      alert("Failed to delete story");
-    }
+  const startEdit = (item) => {
+    setEditingId(item._id);
+    setEditText(item.story);
+  };
+
+  const saveEdit = async (id) => {
+    if (!editText.trim()) return alert("Story cannot be empty");
+
+    await axios.put(`${API_URL}/api/stories/${id}`, {
+      story: editText,
+    });
+
+    setEditingId(null);
+    setEditText("");
+    fetchStories();
+  };
+
+  const likeStory = async (id) => {
+    await axios.put(`${API_URL}/api/stories/${id}/like`);
+    fetchStories();
   };
 
   return (
@@ -89,7 +93,6 @@ function Stories() {
               padding: "25px",
               borderRadius: "15px",
               marginBottom: "30px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             }}
           >
             <textarea
@@ -101,7 +104,6 @@ function Stories() {
                 minHeight: "120px",
                 padding: "15px",
                 borderRadius: "10px",
-                border: "1px solid #ccc",
                 marginBottom: "15px",
                 boxSizing: "border-box",
               }}
@@ -110,69 +112,116 @@ function Stories() {
             <button
               onClick={addStory}
               disabled={loading}
-              style={{
-                backgroundColor: loading ? "#9ca3af" : "#2563eb",
-                color: "white",
-                border: "none",
-                padding: "12px 20px",
-                borderRadius: "10px",
-                cursor: loading ? "not-allowed" : "pointer",
-                fontWeight: "bold",
-              }}
+              style={blueButton}
             >
               {loading ? "Posting..." : "Post Story"}
             </button>
           </div>
 
-          {stories.length === 0 ? (
-            <h2 style={{ textAlign: "center" }}>No stories yet</h2>
-          ) : (
-            stories.map((item) => (
-              <div
-                key={item._id}
-                style={{
-                  backgroundColor: darkMode ? "#1f2937" : "white",
-                  padding: "20px",
-                  borderRadius: "15px",
-                  marginBottom: "20px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                }}
-              >
-                <h3>{item.name}</h3>
+          {stories.map((item) => (
+            <div
+              key={item._id}
+              style={{
+                backgroundColor: darkMode ? "#1f2937" : "white",
+                padding: "20px",
+                borderRadius: "15px",
+                marginBottom: "20px",
+              }}
+            >
+              <h3>{item.name}</h3>
 
-                <p>{item.story}</p>
+              {editingId === item._id ? (
+                <>
+                  <textarea
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    style={{
+                      width: "100%",
+                      minHeight: "100px",
+                      padding: "12px",
+                      borderRadius: "10px",
+                      marginBottom: "10px",
+                      boxSizing: "border-box",
+                    }}
+                  />
 
-                <small>
-                  {item.createdAt
-                    ? new Date(item.createdAt).toLocaleString()
-                    : ""}
-                </small>
+                  <button onClick={() => saveEdit(item._id)} style={greenButton}>
+                    Save
+                  </button>
 
-                {item.userEmail === user?.email && (
-                  <div style={{ marginTop: "15px" }}>
-                    <button
-                      onClick={() => deleteStory(item._id)}
-                      style={{
-                        backgroundColor: "#dc2626",
-                        color: "white",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Delete
+                  <button
+                    onClick={() => setEditingId(null)}
+                    style={grayButton}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p>{item.story}</p>
+
+                  <small>
+                    {item.createdAt
+                      ? new Date(item.createdAt).toLocaleString()
+                      : ""}
+                  </small>
+
+                  <div style={{ marginTop: "15px", display: "flex", gap: "10px" }}>
+                    <button onClick={() => likeStory(item._id)} style={redButton}>
+                      ❤️ Like {item.likes || 0}
                     </button>
+
+                    {item.userEmail === user?.email && (
+                      <>
+                        <button onClick={() => startEdit(item)} style={yellowButton}>
+                          Edit
+                        </button>
+
+                        <button onClick={() => deleteStory(item._id)} style={redButton}>
+                          Delete
+                        </button>
+                      </>
+                    )}
                   </div>
-                )}
-              </div>
-            ))
-          )}
+                </>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </>
   );
 }
+
+const blueButton = {
+  backgroundColor: "#2563eb",
+  color: "white",
+  border: "none",
+  padding: "12px 20px",
+  borderRadius: "10px",
+  cursor: "pointer",
+  fontWeight: "bold",
+};
+
+const greenButton = {
+  ...blueButton,
+  backgroundColor: "#16a34a",
+  marginRight: "10px",
+};
+
+const redButton = {
+  ...blueButton,
+  backgroundColor: "#dc2626",
+};
+
+const yellowButton = {
+  ...blueButton,
+  backgroundColor: "#f59e0b",
+};
+
+const grayButton = {
+  ...blueButton,
+  backgroundColor: "#6b7280",
+};
 
 export default Stories;
