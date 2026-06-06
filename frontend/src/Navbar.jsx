@@ -33,7 +33,7 @@ function Navbar() {
           Congolese Community
         </h1>
 
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-6 items-center flex-wrap">
 
           <button
             onClick={toggleDarkMode}
@@ -71,44 +71,25 @@ function Navbar() {
           </button>
 
           <button
-  onClick={() => (window.location.href = "/events")}
-  className="hover:text-gray-200"
->
-  Events
-</button>
-<button
-  onClick={() => (window.location.href = "/donate")}
-  className="hover:text-gray-200"
->
-  Donate
-</button>
-<button
-  onClick={() => (window.location.href = "/stories")}
-  className="hover:text-gray-200"
->
-  Stories
-</button>
+            onClick={() => (window.location.href = "/events")}
+            className="hover:text-gray-200"
+          >
+            Events
+          </button>
 
-<button onClick={() => handleDelete(story._id)}>
-  Delete
-</button>
+          <button
+            onClick={() => (window.location.href = "/donate")}
+            className="hover:text-gray-200"
+          >
+            Donate
+          </button>
 
-<button
-  onClick={() => handleLike(story._id)}
-  style={{
-    marginTop: "12px",
-    backgroundColor: "#e11d48",
-    color: "white",
-    border: "none",
-    padding: "8px 14px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "bold",
-    marginRight: "10px",
-  }}
->
-  ❤️ Like {story.likes || 0}
-</button>
+          <button
+            onClick={() => (window.location.href = "/stories")}
+            className="hover:text-gray-200"
+          >
+            Stories
+          </button>
 
           <button
             onClick={() => (window.location.href = "/developer")}
