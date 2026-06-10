@@ -7,14 +7,17 @@ const storage = new CloudinaryStorage({
   params: async (req, file) => {
     const ext = file.originalname.split(".").pop().toLowerCase();
 
+    const rawFiles = ["pdf", "doc", "docx"];
+
     return {
       folder: "congolese-community-uploads",
-      resource_type: ["pdf", "doc", "docx"].includes(ext) ? "raw" : "image",
+      resource_type: rawFiles.includes(ext) ? "raw" : "image",
+      format: ext,
       type: "upload",
       access_mode: "public",
-      allowed_formats: ["jpg", "jpeg", "png", "webp", "pdf", "doc", "docx"]
+      allowed_formats: ["jpg", "jpeg", "png", "webp", "pdf", "doc", "docx"],
     };
-  }
+  },
 });
 
 const upload = multer({ storage });

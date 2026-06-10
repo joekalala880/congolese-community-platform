@@ -34,12 +34,12 @@ router.post("/", (req, res) => {
 router.get("/file/:folder/:fileId", async (req, res) => {
   try {
     const publicId = `${req.params.folder}/${req.params.fileId}`;
-
-    const fileUrl = cloudinary.url(publicId, {
-      resource_type: "image",
-      type: "upload",
-      sign_url: true
-    });
+    
+const fileUrl = cloudinary.url(publicId, {
+  resource_type: "raw",
+  type: "upload",
+  sign_url: true,
+});
 
     return res.redirect(fileUrl);
   } catch (error) {
