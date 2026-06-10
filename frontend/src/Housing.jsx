@@ -209,7 +209,7 @@ function Housing() {
 
           <input
             type="file"
-            accept=".pdf,.jpg,.jpeg,.png,.webp"
+            accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx"
             onChange={handleFileChange}
             style={inputStyle}
           />
