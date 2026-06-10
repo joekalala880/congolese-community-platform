@@ -16,17 +16,59 @@ function Housing() {
     address: "",
     needType: "",
     urgency: "",
-    description: ""
+    description: "",
   });
+
+  const inputStyle = {
+    width: "100%",
+    padding: "14px",
+    marginBottom: "18px",
+    borderRadius: "10px",
+    border: "1px solid #d1d5db",
+    fontSize: "16px",
+    boxSizing: "border-box",
+    backgroundColor: darkMode ? "#111827" : "white",
+    color: darkMode ? "white" : "black",
+  };
+
+  const allowedFileTypes = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+  ];
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+
+    if (!selectedFile) {
+      setFile(null);
+      return;
+    }
+
+    if (!allowedFileTypes.includes(selectedFile.type)) {
+      toast.error("Only PDF and image files are allowed");
+      e.target.value = "";
+      setFile(null);
+      return;
+    }
+
+    setFile(selectedFile);
+  };
+
   const submitHousingRequest = async () => {
+    if (!formData.address || !formData.needType || !formData.urgency || !formData.description) {
+      toast.error("Please complete all fields");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -37,22 +79,26 @@ function Housing() {
         const uploadData = new FormData();
         uploadData.append("file", file);
 
-        const uploadResponse = await axios.post(`${API_URL}/api/upload`, uploadData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
+        const uploadResponse = await axios.post(
+          `${API_URL}/api/upload`,
+          uploadData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           }
-        });
+        );
 
         uploadedFileUrl = uploadResponse.data.fileUrl;
         uploadedFileName = uploadResponse.data.fileName;
       }
 
       await axios.post(`${API_URL}/api/housing/request`, {
-        userName: user?.firstName,
-        userEmail: user?.email,
+        userName: user?.firstName || "Anonymous User",
+        userEmail: user?.email || "",
         ...formData,
         fileUrl: uploadedFileUrl,
-        fileName: uploadedFileName
+        fileName: uploadedFileName,
       });
 
       toast.success("Housing request submitted successfully");
@@ -61,13 +107,15 @@ function Housing() {
         address: "",
         needType: "",
         urgency: "",
-        description: ""
+        description: "",
       });
 
       setFile(null);
     } catch (error) {
-      console.log(error);
-      toast.error("Failed to submit housing request");
+      console.log("HOUSING SUBMIT ERROR:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to submit housing request"
+      );
     } finally {
       setLoading(false);
     }
@@ -82,7 +130,7 @@ function Housing() {
           minHeight: "100vh",
           backgroundColor: darkMode ? "#111827" : "#f3f4f6",
           padding: "50px 20px",
-          color: darkMode ? "white" : "black"
+          color: darkMode ? "white" : "black",
         }}
       >
         <div
@@ -92,7 +140,7 @@ function Housing() {
             backgroundColor: darkMode ? "#1f2937" : "white",
             padding: "35px",
             borderRadius: "18px",
-            boxShadow: "0 10px 25px rgba(0,0,0,0.15)"
+            boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
           }}
         >
           <h1 style={{ textAlign: "center", color: "#2563eb" }}>
@@ -145,18 +193,24 @@ function Housing() {
             rows="5"
             style={{
               ...inputStyle,
-              resize: "vertical"
+              resize: "vertical",
             }}
           />
 
-          <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
-            Upload document optional
+          <label
+            style={{
+              fontWeight: "bold",
+              display: "block",
+              marginBottom: "8px",
+            }}
+          >
+            Upload document optional (PDF or image only)
           </label>
 
           <input
             type="file"
-            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-            onChange={(e) => setFile(e.target.files[0])}
+            accept=".pdf,.jpg,.jpeg,.png,.webp"
+            onChange={handleFileChange}
             style={inputStyle}
           />
 
@@ -178,14 +232,14 @@ function Housing() {
               borderRadius: "10px",
               fontWeight: "bold",
               cursor: loading ? "not-allowed" : "pointer",
-              marginTop: "10px"
+              marginTop: "10px",
             }}
           >
             {loading ? "Submitting..." : "Submit Housing Request"}
           </button>
 
           <button
-            onClick={() => window.location.href = "/dashboard"}
+            onClick={() => (window.location.href = "/dashboard")}
             style={{
               width: "100%",
               padding: "14px",
@@ -195,7 +249,7 @@ function Housing() {
               borderRadius: "10px",
               fontWeight: "bold",
               cursor: "pointer",
-              marginTop: "15px"
+              marginTop: "15px",
             }}
           >
             Back to Dashboard
@@ -205,15 +259,5 @@ function Housing() {
     </>
   );
 }
-
-const inputStyle = {
-  width: "100%",
-  padding: "14px",
-  marginBottom: "18px",
-  borderRadius: "10px",
-  border: "1px solid #d1d5db",
-  fontSize: "16px",
-  boxSizing: "border-box"
-};
 
 export default Housing;
