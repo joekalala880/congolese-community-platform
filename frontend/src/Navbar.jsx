@@ -100,26 +100,17 @@ function Navbar() {
 
           {user?.role === "admin" && (
             <>
-              <button
-                onClick={() => (window.location.href = "/admin")}
-                className="hover:text-gray-200"
-              >
-                Admin
-              </button>
+             <button onClick={() => (window.location.href = "/admin")} className="hover:text-gray-200">
+  Admin
+</button>
 
-              <button
-                onClick={() => (window.location.href = "/analytics")}
-                className="hover:text-gray-200"
-              >
-                Analytics
-              </button>
+<button onClick={() => (window.location.href = "/analytics")} className="hover:text-gray-200">
+  Analytics
+</button>
 
-              <button
-                onClick={() => (window.location.href = "/users")}
-                className="hover:text-gray-200"
-              >
-                Users
-              </button>
+<button onClick={() => (window.location.href = "/users")} className="hover:text-gray-200">
+  Users
+</button>
             </>
           )}
 
