@@ -2,49 +2,27 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      "secretkey",
-      { expiresIn: "1d" }
-    );
-
-    res.status(200).json({
-      message: "Login successful",
-      token,
-      user
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
+// REGISTER
 const registerUser = async (req, res) => {
   try {
-    const { firstName, middleName, lastName, email, phone, password, concern } = req.body;
+    let {
+      firstName,
+      middleName,
+      lastName,
+      email,
+      phone,
+      password,
+      concern
+    } = req.body;
 
-    console.log("FULL BODY:", req.body);
+    email = email.trim().toLowerCase();
 
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({
+        message: "User already exists"
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -56,35 +34,91 @@ const registerUser = async (req, res) => {
       email,
       phone,
       concern,
-      password: hashedPassword
+      password: hashedPassword,
+      role: "user"
     });
 
     res.status(201).json({
       message: "Account created successfully",
       user
     });
-
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Server error" });
+    console.log("REGISTER ERROR:", error);
+    res.status(500).json({
+      message: "Server error"
+    });
   }
 };
-const forgotPassword = async (req, res) => {
+
+// LOGIN
+const loginUser = async (req, res) => {
   try {
-    const { email } = req.body;
+    let { email, password } = req.body;
+
+    email = email.trim().toLowerCase();
 
     const user = await User.findOne({ email });
 
     if (!user) {
+      return res.status(400).json({
+        message: "No account found"
+      });
+    }
+
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Wrong password"
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role
+      },
+      "secretkey",
+      {
+        expiresIn: "1d"
+      }
+    );
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user
+    });
+  } catch (error) {
+    console.log("LOGIN ERROR:", error);
+    res.status(500).json({
+      message: "Server error"
+    });
+  }
+};
+
+// FORGOT PASSWORD
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({
+      email: email.trim().toLowerCase()
+    });
+
+    if (!user) {
       return res.status(404).json({
-        message: "No account found with this email"
+        message: "No account found"
       });
     }
 
     res.status(200).json({
-      message: "Password reset request received. Admin will contact you."
+      message:
+        "Password reset request received"
     });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -92,6 +126,8 @@ const forgotPassword = async (req, res) => {
     });
   }
 };
+
+// GET USERS
 const getUsers = async (req, res) => {
   try {
     const users = await User.find()
@@ -100,47 +136,52 @@ const getUsers = async (req, res) => {
 
     res.status(200).json(users);
   } catch (error) {
-    console.log("GET USERS ERROR:", error);
+    console.log(error);
     res.status(500).json({
-      message: "Server error loading users"
+      message: "Server error"
     });
   }
 };
+
+// DELETE USER
 const deleteUser = async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.params.id);
+    await User.findByIdAndDelete(
+      req.params.id
+    );
 
     res.status(200).json({
-      message: "User deleted successfully"
+      message: "User deleted"
     });
   } catch (error) {
-    console.log("DELETE USER ERROR:", error);
+    console.log(error);
     res.status(500).json({
-      message: "Server error deleting user"
+      message: "Server error"
     });
   }
 };
 
+// UPDATE ROLE
 const updateUserRole = async (req, res) => {
   try {
     const { role } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { role },
-      { new: true }
-    );
+    const updatedUser =
+      await User.findByIdAndUpdate(
+        req.params.id,
+        { role },
+        { new: true }
+      );
 
     res.status(200).json(updatedUser);
-
   } catch (error) {
-    console.log("UPDATE ROLE ERROR:", error);
-
+    console.log(error);
     res.status(500).json({
-      message: "Server error updating role"
+      message: "Server error"
     });
   }
 };
+
 module.exports = {
   registerUser,
   loginUser,
