@@ -5,8 +5,6 @@ function Navbar() {
     localStorage.getItem("darkMode") === "true"
   );
 
-  const user = JSON.parse(localStorage.getItem("user"));
-
   const logoutUser = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -42,77 +40,49 @@ function Navbar() {
             {darkMode ? "☀️ Light" : "🌙 Dark"}
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/dashboard")}
-            className="hover:text-gray-200"
-          >
+          <button onClick={() => (window.location.href = "/dashboard")}>
             Dashboard
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/profile")}
-            className="hover:text-gray-200"
-          >
+          <button onClick={() => (window.location.href = "/profile")}>
             Profile
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/my-requests")}
-            className="hover:text-gray-200"
-          >
+          <button onClick={() => (window.location.href = "/my-requests")}>
             My Requests
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/resources")}
-            className="hover:text-gray-200"
-          >
+          <button onClick={() => (window.location.href = "/resources")}>
             Resources
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/events")}
-            className="hover:text-gray-200"
-          >
+          <button onClick={() => (window.location.href = "/events")}>
             Events
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/donate")}
-            className="hover:text-gray-200"
-          >
+          <button onClick={() => (window.location.href = "/donate")}>
             Donate
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/stories")}
-            className="hover:text-gray-200"
-          >
+          <button onClick={() => (window.location.href = "/stories")}>
             Stories
           </button>
 
-          <button
-            onClick={() => (window.location.href = "/developer")}
-            className="hover:text-gray-200"
-          >
+          <button onClick={() => (window.location.href = "/developer")}>
             Developer
           </button>
 
-          {user?.role === "admin" && (
-            <>
-             <button onClick={() => (window.location.href = "/admin")} className="hover:text-gray-200">
-  Admin
-</button>
+          <button onClick={() => (window.location.href = "/admin")}>
+            Admin
+          </button>
 
-<button onClick={() => (window.location.href = "/analytics")} className="hover:text-gray-200">
-  Analytics
-</button>
+          <button onClick={() => (window.location.href = "/analytics")}>
+            Analytics
+          </button>
 
-<button onClick={() => (window.location.href = "/users")} className="hover:text-gray-200">
-  Users
-</button>
-            </>
-          )}
+          <button onClick={() => (window.location.href = "/users")}>
+            Users
+          </button>
 
           <button
             onClick={logoutUser}
