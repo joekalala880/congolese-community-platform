@@ -32,11 +32,13 @@ function Housing() {
   };
 
   const allowedFileTypes = [
-    "application/pdf",
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-  ];
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+];
 
   const handleChange = (e) => {
     setFormData({
@@ -204,7 +206,7 @@ function Housing() {
               marginBottom: "8px",
             }}
           >
-            Upload document optional (PDF or image only)
+           Upload document optional (PDF, Word, or image)
           </label>
 
           <input
