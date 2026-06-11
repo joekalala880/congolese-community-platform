@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 
+const API_URL = "https://congolese-community-platform.onrender.com";
+
 function MyRequests() {
   const [sortOrder, setSortOrder] = useState("newest");
   const [allRequests, setAllRequests] = useState([]);
   const [search, setSearch] = useState("");
   const [serviceFilter, setServiceFilter] = useState("All");
+  const [loading, setLoading] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const darkMode = localStorage.getItem("darkMode") === "true";
+  const isAdmin = user?.role === "admin";
 
   useEffect(() => {
     fetchRequests();
@@ -17,53 +21,62 @@ function MyRequests() {
 
   const fetchRequests = async () => {
     try {
-         console.log("Logged User:", user?.email);
-      const [housingResponse, foodResponse, immigrationResponse, healthcareResponse] =
-        await Promise.all([
-          axios.get("https://congolese-community-platform.onrender.com/api/housing/requests"),
-          axios.get("https://congolese-community-platform.onrender.com/api/food/requests"),
-          axios.get("https://congolese-community-platform.onrender.com/api/immigration/requests"),
-          axios.get("https://congolese-community-platform.onrender.com/api/healthcare/requests"),
-        ]);
+      setLoading(true);
 
-      const myHousingRequests = housingResponse.data
-        .filter((request) => request.userEmail === user?.email)
-        .map((request) => ({ ...request, service: "Housing" }));
-
-      const myFoodRequests = foodResponse.data
-        .filter((request) => request.userEmail === user?.email)
-        .map((request) => ({ ...request, service: "Food" }));
-
-      const myImmigrationRequests = immigrationResponse.data
-        .filter((request) => request.userEmail === user?.email)
-        .map((request) => ({ ...request, service: "Immigration" }));
-
-      const myHealthcareRequests = healthcareResponse.data
-        .filter((request) => request.userEmail === user?.email)
-        .map((request) => ({ ...request, service: "Healthcare" }));
-
-        console.log("Housing:", myHousingRequests);
-console.log("Food:", myFoodRequests);
-console.log("Immigration:", myImmigrationRequests);
-console.log("Healthcare:", myHealthcareRequests);
-
-console.log("===== DEBUG START =====");
-console.log("Logged User:", user?.email);
-console.log("All Immigration Records:", immigrationResponse.data);
-console.log("Housing:", myHousingRequests);
-console.log("Food:", myFoodRequests);
-console.log("Immigration:", myImmigrationRequests);
-console.log("Healthcare:", myHealthcareRequests);
-console.log("===== DEBUG END =====");
-
-      setAllRequests([
-        ...myHousingRequests,
-        ...myFoodRequests,
-        ...myImmigrationRequests,
-        ...myHealthcareRequests,
+      const [
+        housingResponse,
+        foodResponse,
+        immigrationResponse,
+        healthcareResponse,
+      ] = await Promise.all([
+        axios.get(`${API_URL}/api/housing/requests`),
+        axios.get(`${API_URL}/api/food/requests`),
+        axios.get(`${API_URL}/api/immigration/requests`),
+        axios.get(`${API_URL}/api/healthcare/requests`),
       ]);
+
+      const housingRequests = (housingResponse.data || []).map((request) => ({
+        ...request,
+        service: "Housing",
+      }));
+
+      const foodRequests = (foodResponse.data || []).map((request) => ({
+        ...request,
+        service: "Food",
+      }));
+
+      const immigrationRequests = (immigrationResponse.data || []).map(
+        (request) => ({
+          ...request,
+          service: "Immigration",
+        })
+      );
+
+      const healthcareRequests = (healthcareResponse.data || []).map(
+        (request) => ({
+          ...request,
+          service: "Healthcare",
+        })
+      );
+
+      let combinedRequests = [
+        ...housingRequests,
+        ...foodRequests,
+        ...immigrationRequests,
+        ...healthcareRequests,
+      ];
+
+      if (!isAdmin) {
+        combinedRequests = combinedRequests.filter(
+          (request) => request.userEmail === user?.email
+        );
+      }
+
+      setAllRequests(combinedRequests);
     } catch (error) {
       console.log("MY REQUESTS FETCH ERROR:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,20 +90,20 @@ console.log("===== DEBUG END =====");
     try {
       const service = request.service.toLowerCase();
 
-      await axios.delete(
-        `https://congolese-community-platform.onrender.com/api/${service}/request/${request._id}`
-      );
+      await axios.delete(`${API_URL}/api/${service}/request/${request._id}`);
 
-      setAllRequests(allRequests.filter((item) => item._id !== request._id));
+      setAllRequests((prevRequests) =>
+        prevRequests.filter((item) => item._id !== request._id)
+      );
     } catch (error) {
       console.log("DELETE REQUEST ERROR:", error);
+      alert("Failed to delete request");
     }
   };
 
   const filteredRequests = allRequests
     .filter((request) => {
       const searchText = JSON.stringify(request).toLowerCase();
-
       const matchesSearch = searchText.includes(search.toLowerCase());
 
       const matchesService =
@@ -132,6 +145,15 @@ console.log("===== DEBUG END =====");
     boxSizing: "border-box",
   };
 
+  const badgeStyle = {
+    backgroundColor: "#2563eb",
+    color: "white",
+    padding: "5px 10px",
+    borderRadius: "15px",
+    fontWeight: "bold",
+    fontSize: "14px",
+  };
+
   return (
     <>
       <Navbar />
@@ -145,9 +167,15 @@ console.log("===== DEBUG END =====");
         }}
       >
         <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-          <h1 style={{ textAlign: "center", marginBottom: "40px" }}>
-            My Requests
+          <h1 style={{ textAlign: "center", marginBottom: "10px" }}>
+            {isAdmin ? "All Community Requests" : "My Requests"}
           </h1>
+
+          <p style={{ textAlign: "center", marginBottom: "35px" }}>
+            {isAdmin
+              ? "Admin view: showing requests from all users."
+              : "These are only the requests submitted with your account."}
+          </p>
 
           <div
             style={{
@@ -165,14 +193,22 @@ console.log("===== DEBUG END =====");
             <div style={counterCard}>
               <h3>Pending</h3>
               <h1>
-                {allRequests.filter((request) => request.status !== "Resolved").length}
+                {
+                  allRequests.filter(
+                    (request) => request.status !== "Resolved"
+                  ).length
+                }
               </h1>
             </div>
 
             <div style={counterCard}>
               <h3>Resolved</h3>
               <h1>
-                {allRequests.filter((request) => request.status === "Resolved").length}
+                {
+                  allRequests.filter(
+                    (request) => request.status === "Resolved"
+                  ).length
+                }
               </h1>
             </div>
           </div>
@@ -206,11 +242,13 @@ console.log("===== DEBUG END =====");
             <option value="oldest">Oldest First</option>
           </select>
 
-          {filteredRequests.length === 0 ? (
+          {loading ? (
+            <h2 style={{ textAlign: "center" }}>Loading requests...</h2>
+          ) : filteredRequests.length === 0 ? (
             <h2 style={{ textAlign: "center" }}>No requests found</h2>
           ) : (
             filteredRequests.map((request) => (
-              <div key={request._id} style={requestCard}>
+              <div key={`${request.service}-${request._id}`} style={requestCard}>
                 <h2>
                   {request.needType ||
                     request.foodNeed ||
@@ -221,22 +259,26 @@ console.log("===== DEBUG END =====");
 
                 <p>
                   <strong>Service:</strong>{" "}
-                  <span
-                    style={{
-                      backgroundColor: "#2563eb",
-                      color: "white",
-                      padding: "5px 10px",
-                      borderRadius: "15px",
-                      fontWeight: "bold",
-                      fontSize: "14px",
-                    }}
-                  >
+                  <span style={badgeStyle}>
                     {request.service === "Housing" && "🏠 Housing"}
                     {request.service === "Food" && "🍲 Food"}
                     {request.service === "Immigration" && "🌍 Immigration"}
                     {request.service === "Healthcare" && "🩺 Healthcare"}
                   </span>
                 </p>
+
+                {isAdmin && (
+                  <p>
+                    <strong>User Email:</strong>{" "}
+                    {request.userEmail || "No email saved"}
+                  </p>
+                )}
+
+                {request.userName && (
+                  <p>
+                    <strong>User Name:</strong> {request.userName}
+                  </p>
+                )}
 
                 {request.address && (
                   <p>
