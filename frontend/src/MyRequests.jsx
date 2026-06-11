@@ -17,6 +17,7 @@ function MyRequests() {
 
   const fetchRequests = async () => {
     try {
+         console.log("Logged User:", user?.email);
       const [housingResponse, foodResponse, immigrationResponse, healthcareResponse] =
         await Promise.all([
           axios.get("https://congolese-community-platform.onrender.com/api/housing/requests"),
