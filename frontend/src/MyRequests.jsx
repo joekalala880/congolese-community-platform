@@ -42,6 +42,20 @@ function MyRequests() {
         .filter((request) => request.userEmail === user?.email)
         .map((request) => ({ ...request, service: "Healthcare" }));
 
+        console.log("Housing:", myHousingRequests);
+console.log("Food:", myFoodRequests);
+console.log("Immigration:", myImmigrationRequests);
+console.log("Healthcare:", myHealthcareRequests);
+
+console.log("===== DEBUG START =====");
+console.log("Logged User:", user?.email);
+console.log("All Immigration Records:", immigrationResponse.data);
+console.log("Housing:", myHousingRequests);
+console.log("Food:", myFoodRequests);
+console.log("Immigration:", myImmigrationRequests);
+console.log("Healthcare:", myHealthcareRequests);
+console.log("===== DEBUG END =====");
+
       setAllRequests([
         ...myHousingRequests,
         ...myFoodRequests,
