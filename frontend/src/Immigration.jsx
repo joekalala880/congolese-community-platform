@@ -15,18 +15,35 @@ function Immigration() {
   const [formData, setFormData] = useState({
     caseType: "",
     urgency: "",
-    description: ""
+    description: "",
   });
+
+  const inputStyle = {
+    width: "100%",
+    padding: "14px",
+    marginBottom: "18px",
+    borderRadius: "10px",
+    border: "1px solid #d1d5db",
+    fontSize: "16px",
+    boxSizing: "border-box",
+    backgroundColor: darkMode ? "#111827" : "white",
+    color: darkMode ? "white" : "black",
+  };
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const submitImmigrationRequest = async () => {
     try {
+      if (!user?.email) {
+        toast.error("Please login first");
+        return;
+      }
+
       if (!formData.caseType || !formData.urgency || !formData.description) {
         toast.error("Please fill all fields");
         return;
@@ -46,8 +63,8 @@ function Immigration() {
           uploadData,
           {
             headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              "Content-Type": "multipart/form-data",
+            },
           }
         );
 
@@ -55,28 +72,34 @@ function Immigration() {
         uploadedFileName = uploadResponse.data.fileName || "";
       }
 
-      await axios.post(`${API_URL}/api/immigration/request`, {
+      const requestData = {
         userName: user?.firstName || "Unknown",
-        userEmail: user?.email || "Unknown",
+        userEmail: user?.email,
         caseType: formData.caseType,
         urgency: formData.urgency,
         description: formData.description,
         fileUrl: uploadedFileUrl,
-        fileName: uploadedFileName
-      });
+        fileName: uploadedFileName,
+      };
+
+      console.log("Submitting Immigration Request:", requestData);
+
+      await axios.post(`${API_URL}/api/immigration/request`, requestData);
 
       toast.success("Immigration request submitted successfully");
 
       setFormData({
         caseType: "",
         urgency: "",
-        description: ""
+        description: "",
       });
 
       setFile(null);
     } catch (error) {
       console.log("IMMIGRATION SUBMIT ERROR:", error);
-      toast.error(error.response?.data?.message || "Failed to submit immigration request");
+      toast.error(
+        error.response?.data?.message || "Failed to submit immigration request"
+      );
     } finally {
       setLoading(false);
     }
@@ -91,7 +114,7 @@ function Immigration() {
           minHeight: "100vh",
           backgroundColor: darkMode ? "#111827" : "#f3f4f6",
           padding: "50px 20px",
-          color: darkMode ? "white" : "black"
+          color: darkMode ? "white" : "black",
         }}
       >
         <div
@@ -101,7 +124,7 @@ function Immigration() {
             backgroundColor: darkMode ? "#1f2937" : "white",
             padding: "35px",
             borderRadius: "18px",
-            boxShadow: "0 10px 25px rgba(0,0,0,0.15)"
+            boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
           }}
         >
           <h1 style={{ textAlign: "center", color: "#2563eb" }}>
@@ -109,7 +132,8 @@ function Immigration() {
           </h1>
 
           <p style={{ textAlign: "center", marginBottom: "30px" }}>
-            Get help with immigration cases, paperwork, citizenship, asylum, visas, and legal support.
+            Get help with immigration cases, paperwork, citizenship, asylum,
+            visas, and legal support.
           </p>
 
           <select
@@ -148,12 +172,18 @@ function Immigration() {
             rows="5"
             style={{
               ...inputStyle,
-              resize: "vertical"
+              resize: "vertical",
             }}
           />
 
-          <label style={{ fontWeight: "bold", display: "block", marginBottom: "8px" }}>
-            Upload document optional
+          <label
+            style={{
+              fontWeight: "bold",
+              display: "block",
+              marginBottom: "8px",
+            }}
+          >
+            Upload document optional (PDF, Word, or image)
           </label>
 
           <input
@@ -181,7 +211,7 @@ function Immigration() {
               borderRadius: "10px",
               fontWeight: "bold",
               cursor: loading ? "not-allowed" : "pointer",
-              marginTop: "10px"
+              marginTop: "10px",
             }}
           >
             {loading ? "Submitting..." : "Submit Immigration Request"}
@@ -199,7 +229,7 @@ function Immigration() {
               borderRadius: "10px",
               fontWeight: "bold",
               cursor: loading ? "not-allowed" : "pointer",
-              marginTop: "15px"
+              marginTop: "15px",
             }}
           >
             Back to Dashboard
@@ -209,15 +239,5 @@ function Immigration() {
     </>
   );
 }
-
-const inputStyle = {
-  width: "100%",
-  padding: "14px",
-  marginBottom: "18px",
-  borderRadius: "10px",
-  border: "1px solid #d1d5db",
-  fontSize: "16px",
-  boxSizing: "border-box"
-};
 
 export default Immigration;
